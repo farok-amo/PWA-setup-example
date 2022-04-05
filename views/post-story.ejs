@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>STORY</title>
+    <style>
+        textarea {
+            width: 50%;
+            height: 120px;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            background-color: white;
+            resize: none;
+        }
+
+        body {
+            margin: auto;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <h1><%= title %>></h1>
+    <p>Please fill the form with all the details to upload a story.</p>
+    <form>
+        <label for="fname">Author name:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="image">Choose a Image to upload:</label><br>
+        <input type="file" id="image" name="image"><br>
+        <label for="description">Description of the story :</label><br>
+        <textarea id="description" name="description"></textarea><br>
+        <button type="submit">Upload</button>
+    </form>
+</div>
+
+</body>
+</html>
