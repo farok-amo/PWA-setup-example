@@ -3,7 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+const mongoose = require('mongoose')
+const Story = require('./models/story')
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var joinRoomRouter = require('./routes/join-room');
@@ -29,6 +30,8 @@ app.use('/post-story', postStoryRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+//Code to handle image uplaods TBD
 
 // error handler
 app.use(function(err, req, res, next) {
