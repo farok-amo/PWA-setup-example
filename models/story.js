@@ -13,12 +13,13 @@ const storySchema = new mongoose.Schema({
         type: String
     },
     img: {
-        required: true,
+        type: String,
         data: Buffer,
-        contentType: String
-    },
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
-})
+        contentType: String,
+        required: true
+    }
+},
+{timestamps: true})
 
 storySchema.pre('validate', function(next) {
   if (this.title) {
