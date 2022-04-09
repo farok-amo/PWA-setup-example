@@ -17,10 +17,7 @@ const storySchema = new mongoose.Schema({
         data: Buffer,
         contentType: String
     },
-    createdAt: {
-        type: Date,
-        default: Date.now.toLocaleDateString()
-    }
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
 })
 
 storySchema.pre('validate', function(next) {
@@ -31,4 +28,4 @@ storySchema.pre('validate', function(next) {
   next()
 })
 
-module.exports = mongoose.model('Story', storySchema) 
+module.exports = mongoose.model('Story', storySchema)
