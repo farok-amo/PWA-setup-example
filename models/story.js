@@ -13,15 +13,13 @@ const storySchema = new mongoose.Schema({
         type: String
     },
     img: {
-        required: true,
+        type: String,
         data: Buffer,
-        contentType: String
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now.toLocaleDateString()
+        contentType: String,
+        required: true
     }
-})
+},
+{timestamps: true})
 
 storySchema.pre('validate', function(next) {
   if (this.title) {
@@ -31,4 +29,4 @@ storySchema.pre('validate', function(next) {
   next()
 })
 
-module.exports = mongoose.model('Story', storySchema) 
+module.exports = mongoose.model('Story', storySchema)
