@@ -6,6 +6,9 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>STORY</title>
+    <script src="/javascripts/home.js"></script>
+    <script src="https://www.dukelearntoprogram.com/course1/common/js/image/SimpleImage.js">
+    </script>
     <style>
         textarea {
             width: 50%;
@@ -18,9 +21,11 @@
             resize: none;
         }
 
-        body {
-            margin: auto;
-            padding: 10px;
+        canvas {
+            height: 175px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: black;
         }
     </style>
 </head>
@@ -28,14 +33,17 @@
 <div>
     <h1><%= title %>></h1>
     <p>Please fill the form with all the details to upload a story.</p>
+
     <form>
         <label for="fname">Author name:</label><br>
         <input type="text" id="fname" name="fname"><br>
         <label for="image">Choose a Image to upload:</label><br>
-        <input type="file" id="image" name="image"><br>
+        <input type="file" id="image" name="image" onchange="uploadFile()"><br>
         <label for="description">Description of the story :</label><br>
         <textarea id="description" name="description"></textarea><br>
-        <button type="submit">Upload</button>
+        <button type="submit">Upload</button><br>
+        <canvas id="canvas">
+        </canvas>
     </form>
 </div>
 
