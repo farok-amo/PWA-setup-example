@@ -29,23 +29,23 @@
         }
     </style>
 </head>
-<body>
-<div>
-    <h1><%= title %>></h1>
-    <p>Please fill the form with all the details to upload a story.</p>
-
-    <form>
-        <label for="fname">Author name:</label><br>
-        <input type="text" id="fname" name="fname"><br>
-        <label for="image">Choose a Image to upload:</label><br>
-        <input type="file" id="image" name="image" onchange="uploadFile()"><br>
-        <label for="description">Description of the story :</label><br>
-        <textarea id="description" name="description"></textarea><br>
-        <button type="submit">Upload</button><br>
-        <canvas id="canvas">
-        </canvas>
-    </form>
-</div>
+<body onload="init()" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/javascripts/story.js"></script>
+    <div>
+        <h1><%= title %></h1>
+        <p>Please fill the form with all the details to upload a story.</p>
+        <form id="xForm" >
+            <label for="fname">Author name:</label><br>
+            <input type="text" id="aName" name="aName"><br>
+            <label for="image">Choose a Image to upload:</label><br>
+            <input type="file" id="postImage" name="postImage" onchange="uploadFile()"><br>
+            <label for="description">Description of the story :</label><br>
+            <textarea id="postDescription" name="postDescription"></textarea><br>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
 
 </body>
 </html>
