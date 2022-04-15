@@ -8,8 +8,9 @@ exports.insert = function (req, res) {
 
         let story = new storySchema({
             author: storyData.author,
-            family_name: storyData.lastname,
-            dob: storyData.year
+            title: storyData.title,
+            description: storyData.description,
+            img: storyData.img
         });
         console.log('received: ' + story);
 
