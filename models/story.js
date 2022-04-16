@@ -16,7 +16,7 @@ const storySchema = new mongoose.Schema({
         type: String,
         data: Buffer,
         contentType: String,
-        required: true
+        required: false
     }
 },
 {timestamps: true})
@@ -29,4 +29,4 @@ storySchema.pre('validate', function(next) {
   next()
 })
 
-module.exports = mongoose.model('Story', storySchema)
+module.exports = mongoose.model('storySchema', storySchema)
