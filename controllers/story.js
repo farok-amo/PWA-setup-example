@@ -31,9 +31,9 @@ exports.getPosts = function (req, res) {
     storySchema.find({})
         .then(posts => {
             if (posts.length > 0) {
-                res.json(posts);
+                res.render('all-posts',{posts: posts});
             } else {
-                return res.json("Sorry! No Posts to view");
+                res.json("Sorry! No Posts to view");
             }
         })
         .catch((err) => {

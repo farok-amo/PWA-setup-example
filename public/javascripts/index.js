@@ -5,8 +5,8 @@ function init(){
 function sendAjaxQuery(url) {
     axios.post(url)
         .then (function (data) {
-            var posts = document.getElementById('all-posts');
-            posts.innerText = JSON.stringify(data.data) ;
+            var postsDiv = document.getElementById('all-posts');
+            postsDiv.innerHTML = data.data ;
         })
         .catch( function (response) {
             alert (response);
