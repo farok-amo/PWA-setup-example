@@ -25,3 +25,19 @@ exports.insert = function (req, res) {
             })
 
 }
+
+exports.getPosts = function (req, res) {
+    // res.render('index', { title: 'Choose an Option'});
+    storySchema.find({})
+        .then(posts => {
+            if (posts.length > 0) {
+                res.json(posts);
+            } else {
+                return res.json("Sorry! No Posts to view");
+            }
+        })
+        .catch((err) => {
+            res.status(500).send('Invalid data or not found!' + JSON.stringify(err));
+        });
+}
+

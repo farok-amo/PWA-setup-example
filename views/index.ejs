@@ -4,11 +4,12 @@
     <title><%= title %></title>
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/javascripts/index.js"></script>
     <script src="/javascripts/canvas.js"></script>
 </head>
-<body>
+<body onload="init()" >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/javascripts/index.js"></script>
     <!--Join a room button-->
     <form action="chat-room/join">
         <input type="submit" value="Join Room" />
@@ -18,5 +19,6 @@
     <form action="story/post-story">
         <input type="submit" value="Post Story" />
     </form>
+    <div id="all-posts" ></div>
 </body>
 </html>

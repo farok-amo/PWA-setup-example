@@ -7,10 +7,10 @@ var storyControl = require('../controllers/story');
 // });
 
 router.route('/post-story')
-.get (function(req, res) {
+    .get (function(req, res) {
     res.render('post-story', {title: 'Post a Story'});
-})
-.post(storyControl.insert);
+    })
+    .post(storyControl.insert);
 
 /* router.route('/post-story')
     .get (function(req, res) {
