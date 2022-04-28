@@ -9,7 +9,7 @@ exports.insert = function (req, res) {
 
         let story = new storySchema({
             author: storyData.aName,
-            title: "Very Cool and Mysterious Title",
+            title: storyData.postTitle,
             description: storyData.postDescription,
             img: storyData.toUpload
         });

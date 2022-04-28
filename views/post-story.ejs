@@ -40,6 +40,8 @@
         <form id="xForm" onsubmit="onSubmit('/insert')">
             <label for="fname">Author name:</label><br>
             <input type="text" id="aName" name="aName"><br>
+            <label for="title">Story Title:</label><br>
+            <input type="text" id="postTitle" name="postTitle"><br>
             <label for="image">Choose a Image to upload:</label><br>
             <input type="file" id="postImage" name="postImage" onchange="convertToBase64String()"><br>
             <label for="description">Description of the story :</label><br>
@@ -50,7 +52,7 @@
     </div>
     <script type='text/javascript'>
         function convertToBase64String() {
-      
+
           var filesSelected = document.getElementById("postImage").files;
           if (filesSelected.length > 0) {
             var fileToLoad = filesSelected[0];

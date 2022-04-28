@@ -5,7 +5,6 @@ function init(){
 function sendAjaxQuery(url) {
     axios.post(url)
         .then (function (data) {
-            // alert(data.data.toString());
             var posts = document.getElementById('all-posts');
             posts.innerText = JSON.stringify(data.data) ;
         })
