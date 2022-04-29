@@ -13,11 +13,11 @@ exports.insert = function (req, res) {
             description: storyData.postDescription,
             img: storyData.toUpload
         });
-        console.log('received: ' + story);
 
         story.save()
             .then ((results) => {
                     console.log(results._id);
+                res.json("Story uploaded successfully!");
             })
             .catch ((error) => {
                 console.log('catch');

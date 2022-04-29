@@ -23,10 +23,11 @@ function onSubmit(event) {
 
 function sendAjaxQuery(url, data) {
     axios.post(url , data)
-        .then (function (dataR) {
-            alert (dataR.data);
+        .then (function (data) {
+            alert(JSON.stringify(data.data))
+            window.location.href = '../'
         })
         .catch( function (response) {
-            alert (response.toJSON());
+            alert (JSON.stringify(response));
         })
 }
