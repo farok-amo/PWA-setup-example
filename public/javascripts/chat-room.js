@@ -24,6 +24,7 @@ function init() {
 function generateRoom() {
     roomNo = Math.round(Math.random() * 10000);
     document.getElementById('roomNo').value = 'R' + roomNo;
+    document.getElementById('room-code').innerText = 'Your Room Code is: R' + roomNo;
 }
 
 /**

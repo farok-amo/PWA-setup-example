@@ -18,7 +18,6 @@ function onSubmit(event) {
     sendAjaxQuery('./post-story', data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault()
-
 }
 
 function sendAjaxQuery(url, data) {

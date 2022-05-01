@@ -5,7 +5,7 @@ let filesToCache = [
     '/',
     '/javascript/index.js',
     '/javascript/canvas.js',
-    '/javascript/join-room.js',
+    '/javascript/chat-room.js',
     '/stylesheets/style.css',
 ];
 
