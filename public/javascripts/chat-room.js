@@ -43,10 +43,10 @@ function sendChatText() {
 function connectToRoom() {
     roomNo = document.getElementById('roomNo').value;
     name = document.getElementById('name').value;
-    let imageUrl= document.getElementById('image_url').value;
+    let imageSrc = document.getElementById('post-image').src;
     if (!name) name = 'Unknown-' + Math.random();
     //@todo join the room
-    initCanvas(socket, imageUrl);
+    initCanvas(socket, imageSrc);
     hideLoginInterface(roomNo, name);
 }
 

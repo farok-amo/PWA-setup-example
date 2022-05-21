@@ -11,7 +11,7 @@
 <body onload="init()">
 <div id="initial_form" style="display: block">
     <h1>Create a new chat room for story by <%= storyAuthor%></h1>
-    <img src="<%= storyImg%>"/>
+    <img id="post-image" src="<%= storyImg%>"/>
     <h2>Title: <%=storyTitle%></h2>
     <form onsubmit="return false;">
         <p><label for="name"> Enter your name: </label>
@@ -31,6 +31,7 @@
 
 <div id="chat_interface" style="display: none">
     <div>
+        <h1>Chat Room for Story: <%=storyTitle%> by  <%= storyAuthor%> </h1>
         <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
     </div>
     </p>
