@@ -27,11 +27,11 @@ exports.insert = function (req, res) {
 }
 
 exports.getPosts = function (req, res) {
-    // res.render('index', { title: 'Choose an Option'});
     storySchema.find({})
         .then(posts => {
             if (posts.length > 0) {
-                res.render('all-posts',{posts: posts});
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(posts));
             } else {
                 res.json("Sorry! No Posts to view");
             }
