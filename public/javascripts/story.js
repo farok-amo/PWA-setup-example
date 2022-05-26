@@ -27,6 +27,7 @@ function sendAjaxQuery(url, data) {
             window.location.href = '../'
         })
         .catch( function (response) {
-            alert (JSON.stringify(response));
+            storeToUploadPostData(data);
+            alert ("Cannot connect to server! Story saved locally");
         })
 }

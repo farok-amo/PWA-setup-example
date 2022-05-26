@@ -1,9 +1,10 @@
-import * as idb from './idb/index.js';
+import * as idb from './idb/build/index.js';
 
 let db;
 
 const DATABASE = 'db_secret_chat';
 const POSTS_STORE = 'store_posts';
+const TO_UPLOAD_POSTS_STORE = 'store_to_upload_posts';
 const CHATS_STORE = 'store_chats';
 
 async function initDatabase(){
@@ -24,6 +25,13 @@ async function initDatabase(){
                     });
                     chatsDB.createIndex('chat', 'chat', {unique: false, multiEntry: true});
                 }
+                if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_POSTS_STORE)) {
+                    let toUpload_postsDB = upgradeDb.createObjectStore(TO_UPLOAD_POSTS_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    toUpload_postsDB.createIndex('toUpload_post', 'toUpload_post', {unique: false, multiEntry: true});
+                }
             }
         });
         console.log('db created');
@@ -32,7 +40,7 @@ async function initDatabase(){
 window.initDatabase = initDatabase;
 
 async function storePostData(postObject) {
-    console.log('inserting: '+JSON.stringify(postObject));
+    console.log('inserting post');
     if (!db)
         await initDatabase();
     if (db) {
@@ -41,11 +49,45 @@ async function storePostData(postObject) {
             let store = await tx.objectStore(POSTS_STORE);
             await store.put(postObject);
             await  tx.complete;
-            console.log('added post to the store! '+ JSON.stringify(postObject));
+            console.log('added post to the store! ');
         } catch(error) {
             console.log('error: I could not store the element. Reason: '+error);
         }
     }
-    else localStorage.setItem(postObject.title, JSON.stringify(postObject));
 }
 window.storePostData= storePostData;
+
+async function storeToUploadPostData(postObject) {
+    console.log('inserting post');
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(TO_UPLOAD_POSTS_STORE, 'readwrite');
+            let store = await tx.objectStore(TO_UPLOAD_POSTS_STORE);
+            await store.put(postObject);
+            await  tx.complete;
+            console.log('added post to the store! ');
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
+        }
+    }
+}
+window.storeToUploadPostData= storeToUploadPostData;
+
+async function getAllPostData() {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        console.log('fetching posts');
+        let tx = await db.transaction(POSTS_STORE, 'readonly');
+        let store = await tx.objectStore(POSTS_STORE);
+        let index = await store.index('post');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            return readingsList;
+        }
+    }
+}
+window.getAllPostData= getAllPostData;
