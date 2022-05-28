@@ -6,6 +6,7 @@ function sendAjaxQuery(url) {
     axios.post(url)
         .then (function (data) {
             addResults(data.data);
+            deleteOldData();
             for(let i in data.data){
                 let post = data.data[i];
                 storePostData(post);

@@ -14,7 +14,7 @@ router.route('/create')
             storyTitle: req.query.storyTitle,
             storyImg: req.query.storyImg,
             storyAuthor: req.query.storyAuthor
-        });
+        })
     })
 
 module.exports = router;

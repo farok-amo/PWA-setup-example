@@ -91,3 +91,23 @@ async function getAllPostData() {
     }
 }
 window.getAllPostData= getAllPostData;
+
+async function deleteOldData(){
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(POSTS_STORE, 'readwrite');
+        let store = await tx.objectStore(POSTS_STORE);
+        store.clear();
+
+        tx.onsuccess = () => {
+            console.log(`Object Store "${POSTS_STORE}" emptied`);
+        }
+
+        tx.onerror = (err) => {
+            console.error(`Error to empty Object Store: ${POSTS_STORE}`)
+        }
+    }
+}
+window.deleteOldData = deleteOldData;
+
