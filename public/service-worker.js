@@ -3,9 +3,9 @@ let dataCacheName = 'storyv1';
 let cacheName = 'v1';
 let filesToCache = [
     '/',
-    '/javascript/index.js',
-    '/javascript/canvas.js',
-    '/javascript/chat-room.js',
+    '/javascripts/index.js',
+    '/javascripts/canvas.js',
+    '/javascripts/chat-room.js',
     '/stylesheets/style.css',
 ];
 
