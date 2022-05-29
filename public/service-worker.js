@@ -7,6 +7,10 @@ let filesToCache = [
     '/javascripts/canvas.js',
     '/javascripts/chat-room.js',
     '/stylesheets/style.css',
+
+    'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
+    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
+    '/socket.io/socket.io.js'
 ];
 
 
