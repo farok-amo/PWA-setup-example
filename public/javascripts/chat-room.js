@@ -1,6 +1,6 @@
 let name = null;
 let roomNo = null;
-let socket=null;
+let socket = io();
 
 
 /**
@@ -14,6 +14,7 @@ function init() {
     document.getElementById('chat_interface').style.display = 'none';
     
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
+    initChatSocket();
 }
 
 /**
@@ -27,12 +28,28 @@ function generateRoom() {
     document.getElementById('room-code').innerText = 'Your Room Code is: R' + roomNo;
 }
 
+const initChatSocket = () => {
+    socket.on('joined', (room, userId) => {
+        if(userId === name){
+            hideLoginInterface(room, userId);
+        } else {
+            writeOnHistory('<b>' + userId + '<b>' + 'joined room' + room);
+        }
+    });
+
+    socket.on('chat', (room, userId, chatText) => {
+        let who = userId;
+        if(userId === name) who = 'Me';
+        writeOnHistory('<b>' + who + ':</b> ' + chatText);
+    })
+}
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
+    socket.emit('chat', roomNo, name, chatText)
     // @todo send the chat message
 }
 
@@ -45,6 +62,7 @@ function connectToRoom() {
     name = document.getElementById('name').value;
     let imageSrc = document.getElementById('post-image').src;
     if (!name) name = 'Unknown-' + Math.random();
+    socket.emit('create or join', roomNo, name);
     //@todo join the room
     initCanvas(socket, imageSrc);
     hideLoginInterface(roomNo, name);
