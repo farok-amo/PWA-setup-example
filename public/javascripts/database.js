@@ -16,7 +16,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    postsDB.createIndex('post', 'post', {unique: false, multiEntry: true});
+                    postsDB.createIndex('_id', '_id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(CHATS_STORE)) {
                     let chatsDB = upgradeDb.createObjectStore(CHATS_STORE, {
@@ -30,24 +30,25 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('toUpload_post', 'toUpload_post', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('_id', '_id', {unique: false, multiEntry: true});
                 }
             }
         });
-        console.log('db created');
     }
 }
 window.initDatabase = initDatabase;
 
 async function storePostData(postObject) {
-    console.log('inserting post');
     if (!db)
         await initDatabase();
     if (db) {
         try{
             let tx = await db.transaction(POSTS_STORE, 'readwrite');
             let store = await tx.objectStore(POSTS_STORE);
-            await store.put(postObject);
+            for(let i in postObject) {
+                let post = postObject[i];
+                await store.put(post);
+            }
             await  tx.complete;
             console.log('added post to the store! ');
         } catch(error) {
@@ -58,7 +59,6 @@ async function storePostData(postObject) {
 window.storePostData= storePostData;
 
 async function storeToUploadPostData(postObject) {
-    console.log('inserting post');
     if (!db)
         await initDatabase();
     if (db) {
@@ -82,15 +82,35 @@ async function getAllPostData() {
         console.log('fetching posts');
         let tx = await db.transaction(POSTS_STORE, 'readonly');
         let store = await tx.objectStore(POSTS_STORE);
-        let index = await store.index('post');
+        let index = await store.index('_id');
         let readingsList = await index.getAll();
         await tx.complete;
+        console.log('inside');
         if (readingsList && readingsList.length > 0) {
-            return readingsList;
+            console.log('inside');
+            allResults(readingsList);
         }
     }
 }
 window.getAllPostData= getAllPostData;
+
+async function getOnePost(postID) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(POSTS_STORE, 'readonly');
+        let store = await tx.objectStore(POSTS_STORE);
+        let index = await store.index('_id');
+        let readingsList = await index.getAll(IDBKeyRange.only(postID));
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                addPostToResults(elem);
+            }
+        }
+    }
+}
+window.getOnePost= getOnePost;
 
 async function deleteOldData(){
     if (!db)
