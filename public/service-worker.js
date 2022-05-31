@@ -58,6 +58,22 @@ self.addEventListener('install', function (e) {
         }());
         return;
       }
+       if (e.request.url.indexOf('chrome-extension') == 0){
+        
+        console.log('[Service Worker] re-route //chrome-extension', e.request.url);
+        e.respondWith(fetch(e.request));
+
+        return;
+      }
+    
+      
+      if (e.request.url.indexOf('socket.io/') > -1){
+    
+        console.log('[Service Worker] re-route socket.io', e.request.url);
+        e.respondWith(fetch(e.request));
+
+        return;
+      }
       
     e.respondWith(
         caches.match(e.request).then(function (response) {
