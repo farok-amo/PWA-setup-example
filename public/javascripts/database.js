@@ -85,10 +85,8 @@ async function getAllPostData() {
         let index = await store.index('_id');
         let readingsList = await index.getAll();
         await tx.complete;
-        console.log('inside');
         if (readingsList && readingsList.length > 0) {
-            console.log('inside');
-            allResults(readingsList);
+            addResults(readingsList);
         }
     }
 }
