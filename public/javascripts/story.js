@@ -4,7 +4,22 @@ function init(){
     getToUploadPostData();
 }
 
+function pendingPosts(posts){
+    document.getElementById('pending-post-block').style.display = 'block';
+    let pendingPostDiv = document.getElementById('pending-posts');
+    pendingPostDiv.innerHTML = "";
+    for (let elem of posts) {
+        const newDiv2 = document.createElement("div");
+        newDiv2.innerHTML = '<div>\n'+
+            '                   <p>Post: '+elem.postTitle+'</p>'+
+            '                   <button onclick="getOneToUploadPostData(\''+elem.id+'\')">Upload Post</button>'+
+        '                  </div>'
+        pendingPostDiv.appendChild(newDiv2);
+    }
+}
+
 function addPendingPosts(data){
+    console.log(data);
     sendAjaxQuery('./post-story', data);
     clearUploadedPost(data.id);
 }
@@ -35,5 +50,6 @@ function sendAjaxQuery(url, data) {
         .catch( function (response) {
             storeToUploadPostData(data);
             alert ("Cannot connect to server! Story saved locally");
+            getToUploadPostData();
         })
 }

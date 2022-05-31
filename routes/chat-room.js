@@ -10,10 +10,7 @@ router.route('/create')
     .get(function(req, res) {
         res.render('create-room', {
             title: 'Create a new room',
-            storyID: req.query.storyID,
-            storyTitle: req.query.storyTitle,
-            storyImg: req.query.storyImg,
-            storyAuthor: req.query.storyAuthor
+            storyID: req.query.storyID
         })
     })
 

@@ -84,13 +84,35 @@ async function getToUploadPostData() {
         let readingsList = await index.getAll();
         await tx.complete;
         if (readingsList && readingsList.length > 0) {
+            // for (let elem of readingsList) {
+            //     addPendingPosts(elem);
+            // }
+            pendingPosts(readingsList);
+        }
+    }
+}
+window.getToUploadPostData= getToUploadPostData;
+
+async function getOneToUploadPostData(postID) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(TO_UPLOAD_POSTS_STORE, 'readonly');
+        let store = await tx.objectStore(TO_UPLOAD_POSTS_STORE);
+        let index = await store.index('id');
+        let readingsList = await index.getAll(IDBKeyRange.only(parseInt(postID)));
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
             for (let elem of readingsList) {
+                console.log(elem);
                 addPendingPosts(elem);
             }
         }
     }
 }
-window.getToUploadPostData= getToUploadPostData;
+window.getOneToUploadPostData= getOneToUploadPostData;
+
+
 
 
 async function clearUploadedPost(postID){
