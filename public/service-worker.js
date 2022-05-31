@@ -32,44 +32,33 @@ self.addEventListener('install', function (e) {
 /**
  * activation of service worker: it removes all cashed files if necessary
  */
-self.addEventListener('activate', function (e) {
-    console.log('[ServiceWorker] Activate');
-    e.waitUntil(
-        caches.keys().then(function (keyList) {
-            return Promise.all(keyList.map(function (key) {
-                if (key !== cacheName && key !== dataCacheName) {
-                    console.log('[ServiceWorker] Removing old cache', key);
-                    return caches.delete(key);
-                }
-            }));
-        })
-    );
-    /*
-     * Fixes a corner case in which the app wasn't returning the latest data.
-     * You can reproduce the corner case by commenting out the line below and
-     * then doing the following steps: 1) load app for first time so that the
-     * initial New York City data is shown 2) press the refresh button on the
-     * app 3) go offline 4) reload the app. You expect to see the newer NYC
-     * data, but you actually see the initial data. This happens because the
-     * service worker is not yet activated. The code below essentially lets
-     * you activate the service worker faster.
-     */
-    return self.clients.claim();
-});
-
-
-/**
- * this is called every time a file is fetched. This is a middleware, i.e. this method is
- * called every time a page is fetched by the browser
- * all the other pages are searched for in the cache. If not found, they are returned
- */
-self.addEventListener('fetch', function (e) {
+ self.addEventListener('fetch', function (e) {
     console.log('[Service Worker] Fetch', e.request.url);
     /*
     * The app is asking for app shell files. In this scenario the app uses the
     * "Cache, falling back to the network" offline strategy:
     * https://jakearchibald.com/2014/offline-cookbook/#cache-falling-back-to-network
     */
+
+      
+
+      if (/\/chat-room\/create?.+/g.exec(e.request.url)){
+        // Return join page
+        console.log(`[Service Worker] Request Create-Room page`);
+        e.respondWith(async function() {
+          try {
+            response = await fetch(e.request);
+            console.log(`[Service Worker] Fetch Create-Room`);
+            return response;
+          } catch (error) {
+            console.log(`[Service Worker] Fetch Offline Create-Room`);
+            cashed = await caches.match(e.request)
+            return cashed;
+          }
+        }());
+        return;
+      }
+      
     e.respondWith(
         caches.match(e.request).then(function (response) {
             return response
@@ -90,4 +79,4 @@ self.addEventListener('fetch', function (e) {
                     })
         })
     );
-    });
+    })

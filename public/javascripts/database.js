@@ -1,5 +1,4 @@
 import * as idb from './idb/build/index.js';
-
 let db;
 
 const DATABASE = 'db_secret_chat';
@@ -108,6 +107,7 @@ async function getOnePost(postID) {
         }
     }
 }
+
 window.getOnePost= getOnePost;
 
 async function deleteOldData(){
