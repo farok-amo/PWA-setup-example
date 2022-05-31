@@ -1,18 +1,19 @@
+
 let name = null;
 let roomNo = null;
 let socket = io();
-
 
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
  * plus the associated actions
  */
-function init(postID) {
+function initChatRoom(postID) {
     // it sets up the interface so that userId and room are selected
     document.getElementById('initial_form').style.display = 'block';
     document.getElementById('chat_interface').style.display = 'none';
     getOnePost(postID);
+
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
     initChatSocket();
 }
