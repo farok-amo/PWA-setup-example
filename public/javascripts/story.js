@@ -1,6 +1,12 @@
 function init(){
     const form = document.getElementById('xForm');
     form.onsubmit = onSubmit;
+    getToUploadPostData();
+}
+
+function addPendingPosts(data){
+    sendAjaxQuery('./post-story', data);
+    clearUploadedPost(data.id);
 }
 
 /**

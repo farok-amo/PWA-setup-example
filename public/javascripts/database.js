@@ -30,7 +30,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('_id', '_id', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('id', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -74,6 +74,44 @@ async function storeToUploadPostData(postObject) {
     }
 }
 window.storeToUploadPostData= storeToUploadPostData;
+
+async function getToUploadPostData() {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(TO_UPLOAD_POSTS_STORE, 'readonly');
+        let store = await tx.objectStore(TO_UPLOAD_POSTS_STORE);
+        let index = await store.index('id');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                addPendingPosts(elem);
+            }
+        }
+    }
+}
+window.getToUploadPostData= getToUploadPostData;
+
+
+async function clearUploadedPost(postID){
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(TO_UPLOAD_POSTS_STORE, 'readwrite');
+        let store = await tx.objectStore(TO_UPLOAD_POSTS_STORE);
+        store.delete(postID);
+
+        tx.onsuccess = () => {
+            console.log(`Object Store "${TO_UPLOAD_POSTS_STORE}" emptied`);
+        }
+
+        tx.onerror = (err) => {
+            console.error(`Error to empty Object Store: ${TO_UPLOAD_POSTS_STORE}`)
+        }
+    }
+}
+window.clearUploadedPost = clearUploadedPost;
 
 async function getAllPostData() {
     if (!db)
