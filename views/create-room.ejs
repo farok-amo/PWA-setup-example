@@ -5,14 +5,15 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/javascripts/chat-room.js"></script>
+    <script src="/javascripts/database.js" type="module"></script>
+    <script src="/javascripts/chat-room.js" ></script>
     <script src="/javascripts/canvas.js"></script>
 </head>
-<body onload="init()">
+<body onload="initChatRoom('<%= storyID%>')">
 <div id="initial_form" style="display: block">
-    <h1>Create a new chat room for story by <%= storyAuthor%></h1>
-    <img id="post-image" src="<%= storyImg%>"/>
-    <h2>Title: <%=storyTitle%></h2>
+    <h1 id="post-title"></h1>
+    <img id="post-image"/>
+    <h2 id="post-author"> </h2>
     <form onsubmit="return false;">
         <p><label for="name"> Enter your name: </label>
             <input type="text" id="name" name="name">
@@ -22,7 +23,6 @@
             <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
             <p id="room-code">Your Room Code is:</p>
         </p>
-        <input type="text" id="story_id" name="story_id" value="<%=storyID%>" style="display: none;">
         <button id="connect" onclick="connectToRoom()">Connect</button>
     </form>
 </div>
@@ -31,7 +31,7 @@
 
 <div id="chat_interface" style="display: none">
     <div>
-        <h1>Chat Room for Story: <%=storyTitle%> by  <%= storyAuthor%> </h1>
+        <h1 id="room-title"></h1>
         <p><div id="who_you_are" style="display: inline" style="height: 10vh"></div>, you are in room: <div id="in_room" style="display: inline"></div>
     </div>
     </p>
