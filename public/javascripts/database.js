@@ -90,7 +90,7 @@ async function getAllPostData() {
         }
     }
 }
-window.getAllPostData= getAllPostData;
+window.getAllPostData = getAllPostData;
 
 async function deleteOldData(){
     if (!db)

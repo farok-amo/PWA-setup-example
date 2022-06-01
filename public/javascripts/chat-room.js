@@ -1,6 +1,6 @@
 let name = null;
 let roomNo = null;
-let socket = io();
+let chat = io.connect('/chat');
 
 
 /**
@@ -29,15 +29,15 @@ function generateRoom() {
 }
 
 const initChatSocket = () => {
-    socket.on('joined', (room, userId) => {
+    chat.on('joined', (room, userId) => {
         if(userId === name){
             hideLoginInterface(room, userId);
         } else {
-            writeOnHistory('<b>' + userId + '<b>' + 'joined room' + room);
+            writeOnHistory('<b>' + userId + '</b>' + 'joined room' + room);
         }
     });
 
-    socket.on('chat', (room, userId, chatText) => {
+    chat.on('chat', (room, userId, chatText) => {
         let who = userId;
         if(userId === name) who = 'Me';
         writeOnHistory('<b>' + who + ':</b> ' + chatText);
@@ -49,7 +49,7 @@ const initChatSocket = () => {
  */
 function sendChatText() {
     let chatText = document.getElementById('chat_input').value;
-    socket.emit('chat', roomNo, name, chatText)
+    chat.emit('chat', roomNo, name, chatText);
     // @todo send the chat message
 }
 
@@ -62,7 +62,7 @@ function connectToRoom() {
     name = document.getElementById('name').value;
     let imageSrc = document.getElementById('post-image').src;
     if (!name) name = 'Unknown-' + Math.random();
-    socket.emit('create or join', roomNo, name);
+    chat.emit('create or join', roomNo, name);
     //@todo join the room
     initCanvas(socket, imageSrc);
     hideLoginInterface(roomNo, name);

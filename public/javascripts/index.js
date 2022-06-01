@@ -13,7 +13,7 @@ function sendAjaxQuery(url) {
             }
         })
         .catch( function (response) {
-            addResults(getAllPostData());
+            addResults(getAllPostData(response));
             alert (response);
         })
 }

@@ -1,3 +1,5 @@
+const axios= require('axios').default;
+
 function init(){
     const form = document.getElementById('xForm');
     form.onsubmit = onSubmit;

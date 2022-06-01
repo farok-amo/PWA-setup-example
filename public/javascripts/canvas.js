@@ -44,12 +44,17 @@ function initCanvas(sckt, imageUrl) {
     });
 
     // this is code left in case you need to  provide a button clearing the canvas (it is suggested that you implement it)
+    // function emitAndCanvas(){
+    //     socket.emit('clear');
+    //     clearCanvas
+    // }
     $('.canvas-clear').on('click', function (e) {
         let c_width = canvas.width();
         let c_height = canvas.height();
         ctx.clearRect(0, 0, c_width, c_height);
         // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
 
+        // socket.emit('clear', clearCanvas());
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
