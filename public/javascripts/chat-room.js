@@ -39,15 +39,17 @@ const initChatSocket = () => {
     chat.on('joined', (room, userId) => {
         if(userId === name){
             hideLoginInterface(room, userId);
+            getChatHistory(room);
         } else {
             writeOnHistory('<b>' + userId + '</b>' + 'joined room' + room);
         }
     });
 
     chat.on('chat', (room, userId, chatText) => {
-        let who = userId;
-        if(userId === name) who = 'Me';
-        writeOnHistory('<b>' + who + ':</b> ' + chatText);
+        let sender = userId;
+        if(userId === name) sender = 'Me';
+        writeOnHistory('<b>' + sender + ':</b> ' + chatText);
+        storeChatHistory([{room: room,sender:sender,message:chatText}]);
     })
 }
 /**
@@ -71,7 +73,7 @@ function connectToRoom() {
     if (!name) name = 'Unknown-' + Math.random();
     chat.emit('create or join', roomNo, name);
     //@todo join the room
-    initCanvas(socket, imageSrc);
+    initCanvas(chat, imageSrc);
     hideLoginInterface(roomNo, name);
 }
 

@@ -12,24 +12,24 @@ async function initDatabase(){
             upgrade(upgradeDb, oldVersion, newVersion) {
                 if (!upgradeDb.objectStoreNames.contains(POSTS_STORE)) {
                     let postsDB = upgradeDb.createObjectStore(POSTS_STORE, {
-                        keyPath: 'id',
+                        keyPath: '_id',
                         autoIncrement: true
                     });
                     postsDB.createIndex('_id', '_id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(CHATS_STORE)) {
                     let chatsDB = upgradeDb.createObjectStore(CHATS_STORE, {
-                        keyPath: 'id',
+                        keyPath: 'message_id',
                         autoIncrement: true
                     });
-                    chatsDB.createIndex('chat', 'chat', {unique: false, multiEntry: true});
+                    chatsDB.createIndex('chat', 'message_id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_POSTS_STORE)) {
                     let toUpload_postsDB = upgradeDb.createObjectStore(TO_UPLOAD_POSTS_STORE, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('id', 'id', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('_id', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -84,9 +84,6 @@ async function getToUploadPostData() {
         let readingsList = await index.getAll();
         await tx.complete;
         if (readingsList && readingsList.length > 0) {
-            // for (let elem of readingsList) {
-            //     addPendingPosts(elem);
-            // }
             pendingPosts(readingsList);
         }
     }
@@ -170,22 +167,42 @@ async function getOnePost(postID) {
 
 window.getOnePost= getOnePost;
 
-async function deleteOldData(){
+async function storeChatHistory(chats) {
     if (!db)
         await initDatabase();
     if (db) {
-        let tx = await db.transaction(POSTS_STORE, 'readwrite');
-        let store = await tx.objectStore(POSTS_STORE);
-        store.clear();
-
-        tx.onsuccess = () => {
-            console.log(`Object Store "${POSTS_STORE}" emptied`);
-        }
-
-        tx.onerror = (err) => {
-            console.error(`Error to empty Object Store: ${POSTS_STORE}`)
+        try{
+            let tx = await db.transaction(CHATS_STORE, 'readwrite');
+            let store = await tx.objectStore(CHATS_STORE);
+            for(let i in chats) {
+                let chat = chats[i];
+                await store.put(chat);
+            }
+            await  tx.complete;
+            console.log('added post to the store! ');
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
         }
     }
 }
-window.deleteOldData = deleteOldData;
+window.storeChatHistory= storeChatHistory;
 
+async function getChatHistory(roomNo) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(CHATS_STORE, 'readonly');
+        let store = await tx.objectStore(CHATS_STORE);
+        let index = await store.index('chat');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.room == roomNo){
+                    writeOnHistory('<b>' + elem.sender + ':</b> ' + elem.message);
+                }
+            }
+        }
+    }
+}
+window.getChatHistory= getChatHistory;
