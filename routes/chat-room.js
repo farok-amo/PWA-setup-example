@@ -1,6 +1,6 @@
-var express = require('express');
+const express = require('express');
 const storyControl = require("../controllers/story");
-var router = express.Router();
+const router = express.Router();
 
 router.get('/join', function(req, res, next) {
   res.render('join-room', { title: 'Join a Room' });

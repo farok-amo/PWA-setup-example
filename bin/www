@@ -3,17 +3,16 @@
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
-var debug = require('debug')('team:server');
-var http = require('http');
-var database= require('../databases/story')
+const app = require('../app');
+const debug = require('debug')('team:server');
+const http = require('http');
+const database = require('../databases/story');
 
 /**
  * Get port from environment and store in Express.
  */
-
-var port = normalizePort(process.env.PORT || '4001');
+let port;
+port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
