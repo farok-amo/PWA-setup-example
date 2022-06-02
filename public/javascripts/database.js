@@ -36,7 +36,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('_id', 'id', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('annotation', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -232,3 +232,26 @@ async function storeAnnotations(annotation) {
     }
 }
 window.storeAnnotations= storeAnnotations;
+
+async function getAnnotationsHistory(roomNo,img) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(IMAGE_ANNOTATIONS_STORE, 'readonly');
+        let store = await tx.objectStore(IMAGE_ANNOTATIONS_STORE);
+        let index = await store.index('annotation');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        let cvx = document.getElementById('canvas');
+        let ctx = cvx.getContext('2d');
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.roomNo == roomNo && elem.img == img){
+                    drawOnCanvas(ctx, elem.canvas_width, elem.canvas_height, elem.prevX, elem.prevY, elem.currX, elem.currY, elem.color, elem.thickness);
+                    // console.log(ctx, elem.canvas_width, elem.canvas_height, elem.prevX, elem.prevY, elem.currX, elem.currY, elem.color, elem.thickness);
+                }
+            }
+        }
+    }
+}
+window.getAnnotationsHistory= getAnnotationsHistory;

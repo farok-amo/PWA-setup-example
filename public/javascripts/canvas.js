@@ -20,7 +20,7 @@ function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-
+    getAnnotationsHistory(roomNo,imageUrl);
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         prevX = currX;
@@ -67,6 +67,9 @@ function initCanvas(sckt, imageUrl) {
         if(userId !== userId) {
             let ctx = canvas[0].getContext('2d');
             drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness);
+            storeAnnotations([{roomNo: roomNo, userId: userId,img: imageUrl,canvas_width: canvas.width,
+                canvas_height:canvas.height, prevX: prevX,
+                prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);
         }
     });
     // I suggest that you receive userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness
