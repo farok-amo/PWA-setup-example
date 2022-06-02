@@ -5,7 +5,7 @@ const DATABASE = 'db_secret_chat';
 const POSTS_STORE = 'store_posts';
 const TO_UPLOAD_POSTS_STORE = 'store_to_upload_posts';
 const CHATS_STORE = 'store_chats';
-
+const IMAGE_ANNOTATIONS_STORE = 'store_annotations';
 async function initDatabase(){
     if(!db){
         db = await idb.openDB(DATABASE, 2, {
@@ -26,6 +26,13 @@ async function initDatabase(){
                 }
                 if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_POSTS_STORE)) {
                     let toUpload_postsDB = upgradeDb.createObjectStore(TO_UPLOAD_POSTS_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    toUpload_postsDB.createIndex('_id', 'id', {unique: false, multiEntry: true});
+                }
+                if (!upgradeDb.objectStoreNames.contains(IMAGE_ANNOTATIONS_STORE)) {
+                    let toUpload_postsDB = upgradeDb.createObjectStore(IMAGE_ANNOTATIONS_STORE, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
@@ -206,3 +213,22 @@ async function getChatHistory(roomNo) {
     }
 }
 window.getChatHistory= getChatHistory;
+
+async function storeAnnotations(annotation) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(IMAGE_ANNOTATIONS_STORE, 'readwrite');
+            let store = await tx.objectStore(IMAGE_ANNOTATIONS_STORE);
+            for(let i in annotation) {
+                let index = annotation[i];
+                await store.put(index);
+            }
+            await  tx.complete;
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
+        }
+    }
+}
+window.storeAnnotations= storeAnnotations;
