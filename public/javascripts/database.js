@@ -5,31 +5,38 @@ const DATABASE = 'db_secret_chat';
 const POSTS_STORE = 'store_posts';
 const TO_UPLOAD_POSTS_STORE = 'store_to_upload_posts';
 const CHATS_STORE = 'store_chats';
-
+const IMAGE_ANNOTATIONS_STORE = 'store_annotations';
 async function initDatabase(){
     if(!db){
         db = await idb.openDB(DATABASE, 2, {
             upgrade(upgradeDb, oldVersion, newVersion) {
                 if (!upgradeDb.objectStoreNames.contains(POSTS_STORE)) {
                     let postsDB = upgradeDb.createObjectStore(POSTS_STORE, {
-                        keyPath: 'id',
+                        keyPath: '_id',
                         autoIncrement: true
                     });
                     postsDB.createIndex('_id', '_id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(CHATS_STORE)) {
                     let chatsDB = upgradeDb.createObjectStore(CHATS_STORE, {
-                        keyPath: 'id',
+                        keyPath: 'message_id',
                         autoIncrement: true
                     });
-                    chatsDB.createIndex('chat', 'chat', {unique: false, multiEntry: true});
+                    chatsDB.createIndex('chat', 'message_id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(TO_UPLOAD_POSTS_STORE)) {
                     let toUpload_postsDB = upgradeDb.createObjectStore(TO_UPLOAD_POSTS_STORE, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('id', 'id', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('_id', 'id', {unique: false, multiEntry: true});
+                }
+                if (!upgradeDb.objectStoreNames.contains(IMAGE_ANNOTATIONS_STORE)) {
+                    let toUpload_postsDB = upgradeDb.createObjectStore(IMAGE_ANNOTATIONS_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    toUpload_postsDB.createIndex('annotation', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -84,9 +91,6 @@ async function getToUploadPostData() {
         let readingsList = await index.getAll();
         await tx.complete;
         if (readingsList && readingsList.length > 0) {
-            // for (let elem of readingsList) {
-            //     addPendingPosts(elem);
-            // }
             pendingPosts(readingsList);
         }
     }
@@ -170,22 +174,84 @@ async function getOnePost(postID) {
 
 window.getOnePost= getOnePost;
 
-async function deleteOldData(){
+async function storeChatHistory(chats) {
     if (!db)
         await initDatabase();
     if (db) {
-        let tx = await db.transaction(POSTS_STORE, 'readwrite');
-        let store = await tx.objectStore(POSTS_STORE);
-        store.clear();
-
-        tx.onsuccess = () => {
-            console.log(`Object Store "${POSTS_STORE}" emptied`);
-        }
-
-        tx.onerror = (err) => {
-            console.error(`Error to empty Object Store: ${POSTS_STORE}`)
+        try{
+            let tx = await db.transaction(CHATS_STORE, 'readwrite');
+            let store = await tx.objectStore(CHATS_STORE);
+            for(let i in chats) {
+                let chat = chats[i];
+                await store.put(chat);
+            }
+            await  tx.complete;
+            console.log('added post to the store! ');
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
         }
     }
 }
-window.deleteOldData = deleteOldData;
+window.storeChatHistory= storeChatHistory;
 
+async function getChatHistory(roomNo) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(CHATS_STORE, 'readonly');
+        let store = await tx.objectStore(CHATS_STORE);
+        let index = await store.index('chat');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.room == roomNo){
+                    writeOnHistory('<b>' + elem.sender + ':</b> ' + elem.message);
+                }
+            }
+        }
+    }
+}
+window.getChatHistory= getChatHistory;
+
+async function storeAnnotations(annotation) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(IMAGE_ANNOTATIONS_STORE, 'readwrite');
+            let store = await tx.objectStore(IMAGE_ANNOTATIONS_STORE);
+            for(let i in annotation) {
+                let index = annotation[i];
+                await store.put(index);
+            }
+            await  tx.complete;
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
+        }
+    }
+}
+window.storeAnnotations= storeAnnotations;
+
+async function getAnnotationsHistory(roomNo,img) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(IMAGE_ANNOTATIONS_STORE, 'readonly');
+        let store = await tx.objectStore(IMAGE_ANNOTATIONS_STORE);
+        let index = await store.index('annotation');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        let cvx = document.getElementById('canvas');
+        let ctx = cvx.getContext('2d');
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.roomNo == roomNo && elem.img == img){
+                    drawOnCanvas(ctx, elem.canvas_width, elem.canvas_height, elem.prevX, elem.prevY, elem.currX, elem.currY, elem.color, elem.thickness);
+                    // console.log(ctx, elem.canvas_width, elem.canvas_height, elem.prevX, elem.prevY, elem.currX, elem.currY, elem.color, elem.thickness);
+                }
+            }
+        }
+    }
+}
+window.getAnnotationsHistory= getAnnotationsHistory;

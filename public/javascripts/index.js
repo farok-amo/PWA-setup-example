@@ -11,11 +11,8 @@ function sendAjaxQuery(url) {
     axios.post(url)
         .then (function (data) {
             addResults(data.data);
-            deleteOldData()
-                .then(response => console.log("Refreshed Page"))
-                .catch(error => console.log("error  deleting: "+ JSON.stringify(error)))
             storePostData(data.data)
-                .then(response => console.log('inserting worked!!'))
+                .then(response => console.log('Refreshed Page!!'))
                 .catch(error => console.log("error  inserting: "+ JSON.stringify(error)))
         })
         .catch( function (response) {
@@ -36,7 +33,7 @@ function addResults(posts){
             '            <p><img src="'+post.img+'"></p>\n' +
             '            <p>By: '+post.author+'</p>\n' +
             '            <p>'+post.description+'</p>\n' +
-            '            <a href="./chat-room/create?storyID='+post._id+'"><button>Create room for this post</button></a>'+
+            '            <a href="./chat-room/create?storyID='+post._id+'"><button>Chat room for this post</button></a>'+
             '        </div><br>' ;
         postsDiv.appendChild(newDiv);
     }
