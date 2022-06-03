@@ -255,3 +255,25 @@ async function getAnnotationsHistory(roomNo,img) {
     }
 }
 window.getAnnotationsHistory= getAnnotationsHistory;
+
+async function getAllRoomsForEachPost(imgUrl) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(CHATS_STORE, 'readonly');
+        let store = await tx.objectStore(CHATS_STORE);
+        let index = await store.index('chat');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        var roomNos = {}
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.img == imgUrl){
+                    roomNos[elem.room] = elem.room;
+                }
+            }
+            setRooms(roomNos);
+        }
+    }
+}
+window.getAllRoomsForEachPost= getAllRoomsForEachPost;

@@ -3,7 +3,7 @@ let name = null;
 let roomNo = null;
 let chat = io.connect('/chat');
 
-
+let rooms = {};
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -23,6 +23,28 @@ function addPostToResults(elem){
     document.getElementById('post-title').innerText= "Create a chat room for post: "+elem.title;
     document.getElementById('post-image').src = elem.img;
     document.getElementById('room-title').innerText = "Chat Room for Story:"+elem.title+" by "+elem.author;
+    getAllRoomsForEachPost(elem.img).then(r => populatePrevRooms())
+}
+
+function populatePrevRooms(){
+    let prevRooms = document.getElementById('prev-rooms');
+    for(let room in rooms){
+        var option = document.createElement("option");
+        option.text = room.valueOf(room);
+        prevRooms.add(option);
+    }
+}
+
+function setRooms(roomNos){
+    for(let roomNo in roomNos){
+        rooms[roomNo] = roomNo.valueOf(roomNo);
+    }
+}
+
+function setRoomToInput() {
+    var selectBox = document.getElementById('prev-rooms');
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    document.getElementById('roomNo').value = selectedValue;
 }
 
 /**
@@ -50,7 +72,8 @@ const initChatSocket = () => {
         let sender = userId;
         if(userId === name) sender = 'Me';
         writeOnHistory('<b>' + sender + ':</b> ' + chatText);
-        storeChatHistory([{room: room,sender:sender,message:chatText}]);
+        let imageSrc = document.getElementById('post-image').src;
+        storeChatHistory([{room: room,img: imageSrc,sender:sender,message:chatText}]);
     })
 }
 /**
