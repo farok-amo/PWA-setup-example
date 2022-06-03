@@ -3,6 +3,7 @@ let name = null;
 let roomNo = null;
 let chat = io.connect('/chat');
 
+
 /**
  * called by <body onload>
  * it initialises the interface and the expected socket messages
@@ -102,4 +103,7 @@ function hideLoginInterface(room, userId) {
     document.getElementById('who_you_are').innerHTML= userId;
     document.getElementById('in_room').innerHTML= ' '+room;
 }
+
+// const service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
+
 
