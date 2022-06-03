@@ -4,7 +4,7 @@
  * it also hides the form to get the type
  */
 
-const apiKey= 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
+const apiKey= 'AIzaSyCBmNNB0xEEvhgFVR7E5weVIYymb6VYK-w';
 
 function widgetInit(){
     let type= document.getElementById("myType").value;
