@@ -12,7 +12,7 @@ const database = require('../databases/story');
  * Get port from environment and store in Express.
  */
 let port;
-port = normalizePort(process.env.PORT || '3000');
+port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
 /**

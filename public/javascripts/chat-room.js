@@ -2,7 +2,7 @@
 let name = null;
 let roomNo = null;
 let chat = io.connect('/chat');
-
+let rooms = {};
 const apiKey= 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
 
 
@@ -25,6 +25,28 @@ function addPostToResults(elem){
     document.getElementById('post-title').innerText= "Create a chat room for post: "+elem.title;
     document.getElementById('post-image').src = elem.img;
     document.getElementById('room-title').innerText = "Chat Room for Story:"+elem.title+" by "+elem.author;
+    getAllRoomsForEachPost(elem.img).then(r => populatePrevRooms())
+}
+
+function populatePrevRooms(){
+    let prevRooms = document.getElementById('prev-rooms');
+    for(let room in rooms){
+        var option = document.createElement("option");
+        option.text = room.valueOf(room);
+        prevRooms.add(option);
+    }
+}
+
+function setRooms(roomNos){
+    for(let roomNo in roomNos){
+        rooms[roomNo] = roomNo.valueOf(roomNo);
+    }
+}
+
+function setRoomToInput() {
+    var selectBox = document.getElementById('prev-rooms');
+    var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+    document.getElementById('roomNo').value = selectedValue;
 }
 
 /**
@@ -33,9 +55,20 @@ function addPostToResults(elem){
  * so to make sure that the room number is not accidentally repeated across uses
  */
 function generateRoom() {
-    roomNo = Math.round(Math.random() * 10000);
-    document.getElementById('roomNo').value = 'R' + roomNo;
-    document.getElementById('room-code').innerText = 'Your Room Code is: R' + roomNo;
+    let flag = true, found = false;
+    while(flag){
+        roomNo = Math.round(Math.random() * 10000);
+        for(let room in rooms){
+            if(roomNo == room.valueOf(room)){
+                found = true;
+            }
+        }
+        if(!found){
+            document.getElementById('roomNo').value = 'R' + roomNo;
+            document.getElementById('room-code').innerText = 'Your Room Code is: R' + roomNo;
+            flag = false;
+        }
+    }
 }
 
 const initChatSocket = () => {
@@ -52,7 +85,8 @@ const initChatSocket = () => {
         let sender = userId;
         if(userId === name) sender = 'Me';
         writeOnHistory('<b>' + sender + ':</b> ' + chatText);
-        storeChatHistory([{room: room,sender:sender,message:chatText}]);
+        let imageSrc = document.getElementById('post-image').src;
+        storeChatHistory([{room: room,img: imageSrc,sender:sender,message:chatText}]);
     })
 }
 /**
