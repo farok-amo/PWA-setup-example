@@ -7,10 +7,13 @@ let filesToCache = [
     '/javascripts/canvas.js',
     '/javascripts/chat-room.js',
     '/stylesheets/style.css',
+    '/javascripts/knowledgeGraph.js',
 
     'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
     'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
-    '/socket.io/socket.io.js'
+    '/socket.io/socket.io.js',
+    '/stylesheets/widget.min.css',
+    '/javascripts/widget.min.js',
 ];
 
 
@@ -60,6 +63,7 @@ self.addEventListener('install', function (e) {
       }
        if (e.request.url.indexOf('chrome-extension') == 0){
         
+        
         console.log('[Service Worker] re-route //chrome-extension', e.request.url);
         e.respondWith(fetch(e.request));
 
@@ -72,6 +76,13 @@ self.addEventListener('install', function (e) {
         console.log('[Service Worker] re-route socket.io', e.request.url);
         e.respondWith(fetch(e.request));
 
+        return;
+      }
+
+      if (e.request.url.indexOf('kgsearch.googleapis.com') == 0){
+
+        console.log('[Service Worker] re-route kgsearch.googleapis.com', e.request.url);
+        e.respondWith(fetch(e.request));
         return;
       }
       

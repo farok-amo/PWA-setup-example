@@ -7,8 +7,7 @@ router.route('/create')
     .get(function(req, res) {
         res.render('create-room', {
             title: 'Create a new room',
-            storyID: req.query.storyID,
-            post: req.query.getPosts()
+            storyID: req.query.storyID  
         })
     })
 

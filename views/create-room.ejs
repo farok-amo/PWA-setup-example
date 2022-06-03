@@ -2,20 +2,17 @@
 <html>
 <head>
     <title><%= title %></title>
-    <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.css">
-    <style>
-        .kge-search-picker {
-            width:<DROPDOWN_MENU_WIDTH>;
-        }
-    </style>
-    <script type="text/javascript" src="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.js"></script>
+
+    <script src="/javascripts/canvas.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/javascripts/database.js" type="module"></script>
     <script src="/javascripts/chat-room.js" ></script>
+    <script src="/javascripts/widget.min.js" ></script>
+    <link rel='stylesheet' href='/stylesheets/widget.min.css'/>
     <script type="application/javascript" src="/javascripts/knowledgeGraph.js"></script>
-    <script src="/javascripts/canvas.js"></script>
+    
 </head>
 <body onload="initChatRoom('<%= storyID%>')">
 <div id="initial_form" style="display: block">
