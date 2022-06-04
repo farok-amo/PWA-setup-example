@@ -71,7 +71,7 @@ function initCanvas(sckt, imageUrl) {
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness){
-        if(userId !== userId) {
+        if(userId !== name) {
             let ctx = canvas[0].getContext('2d');
             drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
             storeAnnotations([{roomNo: roomNo, userId: userId,img: imageUrl,canvas_width: canvas.width,
