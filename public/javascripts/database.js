@@ -29,7 +29,7 @@ async function initDatabase(){
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('_id', 'id', {unique: false, multiEntry: true});
+                    toUpload_postsDB.createIndex('id', 'id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(IMAGE_ANNOTATIONS_STORE)) {
                     let toUpload_postsDB = upgradeDb.createObjectStore(IMAGE_ANNOTATIONS_STORE, {
