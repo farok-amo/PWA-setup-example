@@ -7,7 +7,7 @@ let filesToCache = [
     '/javascripts/canvas.js',
     '/javascripts/chat-room.js',
     '/stylesheets/style.css',
-    '/javascripts/knowledgeGraph.js',
+    '/chat-room/create',
 
     'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
     'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
@@ -86,24 +86,27 @@ self.addEventListener('install', function (e) {
         return;
       }
       
-    e.respondWith(
-        caches.match(e.request).then(function (response) {
-            return response
-                || fetch(e.request)
-                    .then(function (response) {
-                        // note if network error happens, fetch does not return
-                        // an error. it just returns response not ok
-                        // https://www.tjvantoll.com/2015/09/13/fetch-and-errors/
-                        if (!response.ok ||  response.statusCode>299) {
-                            console.log("error: " + response.error());
-                        } else {
-                            cache.add(e.request.url);
-                            return response;
-                        }
-                    })
-                    .catch(function (err) {
-                        console.log("error: " + err);
-                    })
-        })
-    );
+      e.respondWith(async function () {
+        response = await caches.match(e.request);
+    
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+    
+        response = await fetch(e.request);
+    
+        // Response validation
+        if (!response || response.status !== 200) {
+          console.log(`Response error: [${response.status}]: ${response.statusText}`);
+          return response
+        }
+    
+        // Store to the cache
+        var responseToCache = response.clone();
+        cache = await caches.open(cacheName)
+        cache.put(e.request, responseToCache);
+    
+        return response;
+      }());
     })
