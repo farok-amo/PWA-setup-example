@@ -11,11 +11,11 @@ const apiKey= 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
  * it initialises the interface and the expected socket messages
  * plus the associated actions
  */
-function initChatRoom(postID) {
+function initChatRoom() {
     // it sets up the interface so that userId and room are selected
     document.getElementById('initial_form').style.display = 'block';
     document.getElementById('chat_interface').style.display = 'none';
-    getOnePost(postID);
+    getOnePost();
 
     //@todo here is where you should initialise the socket operations as described in teh lectures (room joining, chat message receipt etc.)
     initChatSocket();
@@ -87,6 +87,13 @@ const initChatSocket = () => {
         writeOnHistory('<b>' + sender + ':</b> ' + chatText);
         let imageSrc = document.getElementById('post-image').src;
         storeChatHistory([{room: room,img: imageSrc,sender:sender,message:chatText}]);
+    });
+
+    chat.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight){
+        if(userId == name){
+            let ctx = canvas[0].getContext('2d');
+            ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+        }
     })
 }
 /**

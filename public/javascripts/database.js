@@ -6,6 +6,7 @@ const POSTS_STORE = 'store_posts';
 const TO_UPLOAD_POSTS_STORE = 'store_to_upload_posts';
 const CHATS_STORE = 'store_chats';
 const IMAGE_ANNOTATIONS_STORE = 'store_annotations';
+const POSTID_FOR_CHAT_STORE = 'store_post_id';
 async function initDatabase(){
     if(!db){
         db = await idb.openDB(DATABASE, 2, {
@@ -32,11 +33,18 @@ async function initDatabase(){
                     toUpload_postsDB.createIndex('id', 'id', {unique: false, multiEntry: true});
                 }
                 if (!upgradeDb.objectStoreNames.contains(IMAGE_ANNOTATIONS_STORE)) {
-                    let toUpload_postsDB = upgradeDb.createObjectStore(IMAGE_ANNOTATIONS_STORE, {
+                    let image_annotation_DB = upgradeDb.createObjectStore(IMAGE_ANNOTATIONS_STORE, {
                         keyPath: 'id',
                         autoIncrement: true
                     });
-                    toUpload_postsDB.createIndex('annotation', 'id', {unique: false, multiEntry: true});
+                    image_annotation_DB.createIndex('annotation', 'id', {unique: false, multiEntry: true});
+                }
+                if (!upgradeDb.objectStoreNames.contains(POSTID_FOR_CHAT_STORE)) {
+                    let post_id_DB = upgradeDb.createObjectStore(POSTID_FOR_CHAT_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    post_id_DB.createIndex('post_id', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -155,15 +163,26 @@ async function getAllPostData() {
 }
 window.getAllPostData = getAllPostData;
 
-async function getOnePost(postID) {
+async function getOnePost() {
     if (!db)
         await initDatabase();
     if (db) {
-        let tx = await db.transaction(POSTS_STORE, 'readonly');
-        let store = await tx.objectStore(POSTS_STORE);
-        let index = await store.index('_id');
-        let readingsList = await index.getAll(IDBKeyRange.only(postID));
+        let tx = await db.transaction(POSTID_FOR_CHAT_STORE, 'readonly');
+        let post_id_store = await tx.objectStore(POSTID_FOR_CHAT_STORE);
+        let post_id_index = await post_id_store.index('post_id');
+        let readingsList1 = await post_id_index.getAll(IDBKeyRange.only(1));
         await tx.complete;
+        let postID;
+        if (readingsList1 && readingsList1.length > 0) {
+            for (let elem of readingsList1) {
+                postID = elem.postID;
+            }
+        }
+        let tx_1 = await db.transaction(POSTS_STORE, 'readonly');
+        let posts_store = await tx_1.objectStore(POSTS_STORE);
+        let posts_index = await posts_store.index('_id');
+        let readingsList = await posts_index.getAll(IDBKeyRange.only(postID));
+        await tx_1.complete;
         if (readingsList && readingsList.length > 0) {
             for (let elem of readingsList) {
                 addPostToResults(elem);
@@ -171,7 +190,6 @@ async function getOnePost(postID) {
         }
     }
 }
-
 window.getOnePost= getOnePost;
 
 async function storeChatHistory(chats) {
@@ -277,3 +295,21 @@ async function getAllRoomsForEachPost(imgUrl) {
     }
 }
 window.getAllRoomsForEachPost= getAllRoomsForEachPost;
+
+async function storePostID(postID) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(POSTID_FOR_CHAT_STORE, 'readwrite');
+            let store = await tx.objectStore(POSTID_FOR_CHAT_STORE);
+            await store.put(postID);
+            await  tx.complete;
+            console.log('added post to the store! ');
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
+        }
+    }
+}
+window.storePostID= storePostID;
+
