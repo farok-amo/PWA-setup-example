@@ -44,6 +44,7 @@ function initCanvas(sckt, imageUrl) {
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
                 socket.emit('draw-canvas', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
 
+
             }
         }
     });
@@ -57,11 +58,13 @@ function initCanvas(sckt, imageUrl) {
 
         let c_width = canvas.width;
         let c_height = canvas.height;
-        /*let clear_canvas =*/ ctx.clearRect(0, 0, c_width, c_height);
+        /*let clear_canvas =*/
         // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
-        socket.emit('Canvas-clear', room, name);
-        let ctx = canvas.getContext('2d');
-        drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness)
+        ctx.clearRect(0, 0, c_width, c_height);
+        socket.emit('Canvas-clear', roomNo, name);
+        ctx.drawImage(img, 0, 0, c_width, c_height);
+
+        // drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness)
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
