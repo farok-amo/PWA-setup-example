@@ -17,6 +17,11 @@ exports.init = function(io) {
           socket.on('disconnect', () => {
             console.log('Disconnected');
           });
+
+          socket.on('drawing', function (room, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
+                chat.to(room).emit('drawing', room, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness)
+          });
+
         } catch (e) {
 
         }

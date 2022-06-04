@@ -3,7 +3,7 @@
  */
 let room;
 let userId;
-let color = 'red', thickness = 4;
+let color = 'rgb(155, 102, 102)', thickness = 4;
 
 /**
  * it inits the image canvas to draw on. It sets up the events to respond to (click, mouse on, etc.)
@@ -36,8 +36,8 @@ function initCanvas(sckt, imageUrl) {
         // if the flag is up, the movement of the mouse draws on the canvas
         if (e.type === 'mousemove') {
             if (flag) {
-                socket.emit('draw-canvas', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                let ctx = canvas[0].getContext('2d');
+                socket.emit('draw-canvas', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                let ctx = cvx.getContext('2d');
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 storeAnnotations([{roomNo: roomNo, userId: name,img: imageUrl,canvas_width: canvas.width,
                                             canvas_height:canvas.height, prevX: prevX,
@@ -69,8 +69,8 @@ function initCanvas(sckt, imageUrl) {
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness){
         if(userId !== userId) {
-            let ctx = canvas[0].getContext('2d');
-            drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+            let ctx = cvx.getContext('2d');
+            drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
             storeAnnotations([{roomNo: roomNo, userId: userId,img: imageUrl,canvas_width: canvas.width,
                 canvas_height:canvas.height, prevX: prevX,
                 prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);

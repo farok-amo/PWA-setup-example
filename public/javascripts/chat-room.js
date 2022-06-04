@@ -87,7 +87,14 @@ const initChatSocket = () => {
         writeOnHistory('<b>' + sender + ':</b> ' + chatText);
         let imageSrc = document.getElementById('post-image').src;
         storeChatHistory([{room: room,img: imageSrc,sender:sender,message:chatText}]);
-    })
+    });
+
+    // chat.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight){
+    //     if(userId == name){
+    //         let ctx = canvas[0].getContext('2d');
+    //         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+    //     }
+    // })
 }
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
