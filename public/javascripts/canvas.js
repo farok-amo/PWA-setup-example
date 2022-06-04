@@ -42,7 +42,7 @@ function initCanvas(sckt, imageUrl) {
                                             prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);
                 // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
-                socket.emit('draw-canvas', room.roomNo, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                socket.emit('draw-canvas', room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
 
             }
         }
@@ -53,20 +53,22 @@ function initCanvas(sckt, imageUrl) {
     //     socket.emit('clear');
     //     clearCanvas
     // }
-    $('.canvas-clear').on('click', function (e) {
-        let c_width = canvas.width();
-        let c_height = canvas.height();
+    $('#canvas-clear').on('click', function (e) {
+
+        let c_width = canvas.width;
+        let c_height = canvas.height;
         /*let clear_canvas =*/ ctx.clearRect(0, 0, c_width, c_height);
         // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
-
-         socket.emit('Canvas-clear', room.roomNo, name);
+        socket.emit('Canvas-clear', room, name);
+        let ctx = canvas.getContext('2d');
+        drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness)
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness){
         if(userId !== userId) {
             let ctx = canvas[0].getContext('2d');
-            drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+            drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
             storeAnnotations([{roomNo: roomNo, userId: userId,img: imageUrl,canvas_width: canvas.width,
                 canvas_height:canvas.height, prevX: prevX,
                 prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);
