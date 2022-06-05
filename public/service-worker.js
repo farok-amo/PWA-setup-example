@@ -5,7 +5,6 @@ let filesToCache = [
     '/',
     '/javascripts/index.js',
     '/javascripts/canvas.js',
-    '/javascripts/create-room.js',
     '/javascripts/chat-room.js',
     '/javascripts/database.js',
     '/javascripts/knowledgeGraph.js',
@@ -93,29 +92,26 @@ let filesToCache = [
         e.respondWith(fetch(e.request));
         return;
       }
-    let online = navigator.onLine;
-    if(!online){
-      e.respondWith(
-       
-        caches.match(e.request).then(function (response) {
-            return response
-                || fetch(e.request)
-                    .then(function (response) {
-                        
-                        if (!response.ok ||  response.statusCode>299) {
-                            console.log("error: " + response.error());
-                        } else {
-                            cache.add(e.request.url);
-                            return response;
-                        }
-                    })
-                    .catch(function (err) {
-                        console.log("error: " + err);
-                    })
-        })
-    );
-    }
-     
+     e.respondWith(
+         caches.match(e.request).then(function (response) {
+             return response
+                 || fetch(e.request)
+                     .then(function (response) {
+                         // note if network error happens, fetch does not return
+                         // an error. it just returns response not ok
+                         // https://www.tjvantoll.com/2015/09/13/fetch-and-errors/
+                         if (!response.ok ||  response.statusCode>299) {
+                             console.log("error: " + response.error());
+                         } else {
+                             cache.add(e.request.url);
+                             return response;
+                         }
+                     })
+                     .catch(function (err) {
+                         console.log("error: " + err);
+                     })
+         })
+     );
       // e.respondWith(async function () {
       //   response = await caches.match(e.request);
 
