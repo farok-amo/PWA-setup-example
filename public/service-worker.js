@@ -1,11 +1,11 @@
 let cache= null;
-let dataCacheName = 'storyv2';
-let cacheName = 'v2';
+let dataCacheName = 'storyv1.01';
 let filesToCache = [
     '/',
     '/javascripts/index.js',
     '/javascripts/canvas.js',
     '/javascripts/chat-room.js',
+    '/javascripts/create-room.js',
     '/javascripts/database.js',
     '/javascripts/knowledgeGraph.js',
     '/javascripts/story.js',
@@ -21,25 +21,18 @@ let filesToCache = [
 ];
 
 
-/**
- * installation event: it adds all the files to be cached
- */
- self.addEventListener('activate', function (e) {
-  console.log('[ServiceWorker] Activate');
-  e.waitUntil(
-      caches.keys().then(function (keyList) {
-          return Promise.all(keyList.map(function (key) {
-              if (key !== cacheName && key !== dataCacheName) {
-                  console.log('[ServiceWorker] Removing old cache', key);
-                  return caches.delete(key);
-              }
-          }));
-      })
-  );
-
-  //return self.clients.claim();
-});
-
+self.addEventListener('install', function (e) {
+    console.log('[ServiceWorker] Install');
+    e.waitUntil(async function(){
+      console.log('[ServiceWorker] Removing old cache');
+      caches.delete(dataCacheName);
+  
+      console.log('[ServiceWorker] Caching app shell');
+      cache = await caches.open(dataCacheName);
+      return cache.addAll(filesToCache);
+    }());
+  });
+  
 
 
  self.addEventListener('fetch', function (e) {
@@ -50,24 +43,6 @@ let filesToCache = [
     * https://jakearchibald.com/2014/offline-cookbook/#cache-falling-back-to-network
     */
 
-      
-
-      if (/\/chat-room\/create?.+/g.exec(e.request.url)){
-        // Return join page
-        console.log(`[Service Worker] Request Create-Room page`);
-        e.respondWith(async function() {
-          try {
-            response = await fetch(e.request);
-            console.log(`[Service Worker] Fetch Create-Room`);
-            return response;
-          } catch (error) {
-            console.log(`[Service Worker] Fetch Offline Create-Room`);
-            cashed = await caches.match(e.request)
-            return cashed;
-          }
-        }());
-        return;
-      }
        if (e.request.url.indexOf('chrome-extension') == 0){
         
         
@@ -92,47 +67,58 @@ let filesToCache = [
         e.respondWith(fetch(e.request));
         return;
       }
-     e.respondWith(
-         caches.match(e.request).then(function (response) {
-             return response
-                 || fetch(e.request)
-                     .then(function (response) {
-                         // note if network error happens, fetch does not return
-                         // an error. it just returns response not ok
-                         // https://www.tjvantoll.com/2015/09/13/fetch-and-errors/
-                         if (!response.ok ||  response.statusCode>299) {
-                             console.log("error: " + response.error());
-                         } else {
-                             cache.add(e.request.url);
-                             return response;
-                         }
-                     })
-                     .catch(function (err) {
-                         console.log("error: " + err);
-                     })
-         })
-     );
-      // e.respondWith(async function () {
-      //   response = await caches.match(e.request);
-
-      //   // Cache hit - return response
-      //   if (response) {
-      //     return response;
-      //   }
-
-      //   response = await fetch(e.request);
-
-      //   // Response validation
-      //   if (!response || response.status !== 200) {
-      //     console.log(`Response error: [${response.status}]: ${response.statusText}`);
-      //     return response
-      //   }
-
-      //   // Store to the cache
-      //   var responseToCache = response.clone();
-      //   cache = await caches.open(cacheName)
-      //   cache.put(e.request, responseToCache);
-
-      //   return response;
-      // }());
+      // when the worker receives a fetch request
+    self.addEventListener('fetch', function(e) {
+    
+        console.log('[Service Worker] Fetch', e.request.url);
+      
+        if (e.request.url.indexOf('chrome-extension') == 0){
+          // Bypass extention
+          e.respondWith(fetch(e.request));
+          return;
+        }
+      
+        if (e.request.url.indexOf('kgsearch.googleapis.com') == 0){
+          // Bypass knowledge graph queries
+          e.respondWith(fetch(e.request));
+          return;
+        }
+        
+        if (e.request.url.indexOf('socket.io/?') > -1){
+          // Bypass socket io
+          e.respondWith(fetch(e.request));
+          return;
+        }
+      
+  
+  
+        /*
+        * The app is asking for app shell files. In this scenario the app uses the
+        * "Cache, falling back to the network" offline strategy:
+        * https://jakearchibald.com/2014/offline-cookbook/#cache-falling-back-to-network
+        */
+        e.respondWith(async function () {
+          response = await caches.match(e.request);
+      
+          // Cache hit - return response
+          if (response) {
+            return response;
+          }
+      
+          response = await fetch(e.request);
+      
+          // Response validation
+          if (!response || response.status !== 200) {
+            console.log(`Response error: [${response.status}]: ${response.statusText}`);
+            return response
+          }
+      
+          // Store to the cache
+          var responseToCache = response.clone();
+          cache = await caches.open(dataCacheName)
+          cache.put(e.request, responseToCache);
+      
+          return response;
+        }());
     })
+ });
