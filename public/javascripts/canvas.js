@@ -43,7 +43,7 @@ function initCanvas(sckt, imageUrl) {
                 let ctx = cvx.getContext('2d');
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 storeAnnotations([{
-                    roomNo: roomNo, userId: name, img: imageUrl, canvas_width: canvas.width,
+                    roomNo: roomNo.toString(), userId: name, img: imageUrl, canvas_width: canvas.width,
                     canvas_height: canvas.height, prevX: prevX,
                     prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
                 }]);
@@ -67,8 +67,7 @@ function initCanvas(sckt, imageUrl) {
         ctx.clearRect(0, 0, c_width, c_height);
         socket.emit('Canvas-clear', roomNo, name);
         ctx.drawImage(img, 0, 0, c_width, c_height);
-
-        // drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness)
+        clearAnnotations(roomNo).then(r => console.log("cleared all annotations"));
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
@@ -79,7 +78,7 @@ function initCanvas(sckt, imageUrl) {
             console.log((roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness));
             drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
             storeAnnotations([{
-                roomNo: roomNo, userId: userId, img: imageUrl, canvas_width: canvas.width,
+                roomNo: roomNo.toString(), userId: userId, img: imageUrl, canvas_width: canvas.width,
                 canvas_height: canvas.height, prevX: prevX,
                 prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
             }]);

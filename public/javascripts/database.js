@@ -324,3 +324,21 @@ async function storePostID(postID) {
 }
 window.storePostID= storePostID;
 
+async function clearAnnotations(roomNo){
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(IMAGE_ANNOTATIONS_STORE, 'readwrite');
+        let store = await tx.objectStore(IMAGE_ANNOTATIONS_STORE);
+        let index = await store.index('annotation');
+        let readingsList = await index.getAll();
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.roomNo == roomNo){
+                    store.delete(elem.id);
+                }
+            }
+        }
+    }
+}
+window.clearAnnotations = clearAnnotations;
