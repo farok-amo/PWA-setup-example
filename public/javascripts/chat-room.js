@@ -13,7 +13,7 @@ function addPostToResults(post,room,user){
     img = post.img;
     if (!name) name = 'Unknown-' + Math.random();
     chat.emit('create or join', roomNo, name);
-    initCanvas(chat, img);
+    initCanvas(chat, img,user);
     document.getElementById('room-title').innerText = "Chat Room for Story:"+post.title+" by "+post.author;
     document.getElementById('who_you_are').innerHTML= name;
     document.getElementById('in_room').innerHTML= ' '+room;
@@ -35,7 +35,7 @@ const initChatSocket = () => {
         if(userId === name) sender = 'Me';
         writeOnHistory('<b>' + sender + ':</b> ' + chatText);
         let imageSrc = img;
-        storeChatHistory([{room: room,img: imageSrc,sender:sender,message:chatText}]);
+        storeChatHistory([{room: room, img: imageSrc, sender: sender, message: chatText}]).then (r =>console.log(""));
     });
 
     // chat.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight){
