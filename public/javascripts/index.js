@@ -33,10 +33,13 @@ function addResults(posts){
             '            <p><img src="'+post.img+'"></p>\n' +
             '            <p>By: '+post.author+'</p>\n' +
             '            <p>'+post.description+'</p>\n' +
-            '            <a href="./chat-room/create?storyID='+post._id+'"><button>Chat room for this post</button></a>'+
+            '            <a href="./chat-room/create" onclick="getPostID(\''+post._id+ '\')"><button>Chat room for this post</button></a>'+
             '        </div><br>' ;
         postsDiv.appendChild(newDiv);
     }
 }
 
+function getPostID(postID){
+    storePostID({id:1,postID:postID});
+}
 
