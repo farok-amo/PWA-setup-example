@@ -17,6 +17,7 @@ function addPostToResults(post,room,user){
     document.getElementById('room-title').innerText = "Chat Room for Story:"+post.title+" by "+post.author;
     document.getElementById('who_you_are').innerHTML= name;
     document.getElementById('in_room').innerHTML= ' '+room;
+    getKnowledgeGraphHistory(roomNo);
 }
 
 

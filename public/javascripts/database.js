@@ -7,6 +7,7 @@ const TO_UPLOAD_POSTS_STORE = 'store_to_upload_posts';
 const CHATS_STORE = 'store_chats';
 const IMAGE_ANNOTATIONS_STORE = 'store_annotations';
 const POSTID_FOR_CHAT_STORE = 'store_post_id';
+const KNOWLEDGE_GRAPH_STORE = 'store_knowledge_graph';
 async function initDatabase(){
     if(!db){
         db = await idb.openDB(DATABASE, 2, {
@@ -45,6 +46,13 @@ async function initDatabase(){
                         autoIncrement: true
                     });
                     post_id_DB.createIndex('post_id', 'id', {unique: false, multiEntry: true});
+                }
+                if (!upgradeDb.objectStoreNames.contains(KNOWLEDGE_GRAPH_STORE)) {
+                    let post_id_DB = upgradeDb.createObjectStore(KNOWLEDGE_GRAPH_STORE, {
+                        keyPath: 'id',
+                        autoIncrement: true
+                    });
+                    post_id_DB.createIndex('knowledge_graph', 'id', {unique: false, multiEntry: true});
                 }
             }
         });
@@ -342,3 +350,40 @@ async function clearAnnotations(roomNo){
     }
 }
 window.clearAnnotations = clearAnnotations;
+
+async function storeKnowledgeGraph(data) {
+    if (!db)
+        await initDatabase();
+    if (db) {
+        try{
+            let tx = await db.transaction(KNOWLEDGE_GRAPH_STORE, 'readwrite');
+            let store = await tx.objectStore(KNOWLEDGE_GRAPH_STORE);
+            await store.put(data);
+            await  tx.complete;
+            console.log('added knowledge graph! ');
+        } catch(error) {
+            console.log('error: I could not store the element. Reason: '+error);
+        }
+    }
+}
+window.storeKnowledgeGraph= storeKnowledgeGraph;
+
+async function getKnowledgeGraphHistory(roomNo){
+    if (!db)
+        await initDatabase();
+    if (db) {
+        let tx = await db.transaction(KNOWLEDGE_GRAPH_STORE, 'readonly');
+        let store = await tx.objectStore(KNOWLEDGE_GRAPH_STORE);
+        let index = await store.index('knowledge_graph');
+        let readingsList = await index.getAll();
+        await tx.complete;
+        if (readingsList && readingsList.length > 0) {
+            for (let elem of readingsList) {
+                if(elem.room == roomNo){
+                    addKnowledgeGraph(elem);
+                }
+            }
+        }
+    }
+}
+window.getKnowledgeGraphHistory= getKnowledgeGraphHistory;

@@ -38,10 +38,29 @@
 function selectItem(event){
     let row= event.row;
     // document.getElementById('resultImage').src= row.json.image.url;
-    document.getElementById('resultId').innerText= 'id: '+row.id;
-    document.getElementById('resultName').innerText= row.name;
-    document.getElementById('resultDescription').innerText= row.rc;
-    document.getElementById("resultUrl").href= row.qc;
-    document.getElementById('resultPanel').style.display= 'block';
+    // document.getElementById('resultId').innerText= 'id: '+row.id;
+    // document.getElementById('resultName').innerText= row.name;
+    // document.getElementById('resultDescription').innerText= row.rc;
+    // document.getElementById("resultUrl").href= row.qc;
+    // document.getElementById('resultPanel').style.display= 'block';
+    let data = {room:roomNo,id:row.id,name:row.name,rc:row.rc,qc:row.qc};
+    storeKnowledgeGraph(data).then(r => console.log("stored knowledge graph"));
+    addKnowledgeGraph(data);
 }
 
+function addKnowledgeGraph(data){
+    document.getElementById('knowledge-graph-result').style.display = 'block';
+    let knowledgeGraphDiv = document.getElementById('knowledge-graph-result');
+    let result = document.createElement("div");
+    result.innerHTML = '<div class=\'resultPanel\' id="resultPanel">\n' +
+'                     <h3 id="resultName">'+data.name+'</h3>\n' +
+'                    <h4 id="resultId">'+data.id+'</h4>\n' +
+'                    <div id="resultDescription">'+data.rc+'</div>\n' +
+'                    <div>\n' +
+'                        <a id="resultUrl"  href="'+data.qc+'" target="_blank">\n' +
+'                            Link to Webpage\n' +
+'                        </a>\n' +
+'                    </div>\n' +
+'                </div>'
+    knowledgeGraphDiv.appendChild(result);
+}
