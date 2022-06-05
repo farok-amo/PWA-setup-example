@@ -10,5 +10,153 @@
     }
   ],
   "paths": {
+    "/post-story": {
+      "post": {
+        "tags": [
+          "Posting or adding a new Story"
+        ],
+        "description": "sending and updating a new story as data",
+        "operationId": "Add story",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Add_New_Story"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Story posted or added",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoryData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid Parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "message": "Input field is invalid",
+                  "internal-code": "invalid_parameters"
+                }
+              }
+            }
+
+          }
+        }
+      }
+    },
+    "/": {
+     "post": {
+       "tags": [
+         "Fetch stories"
+       ],
+       "description": "This will call the get method and show them on home page by fetching them all",
+       "operationId": "getting all stories",
+       "requestBody": {
+         "required": true
+       },
+       "response": {
+         "200": {
+           "description": "Stories fetched successfully",
+           "content": {
+             "application/json": {
+               "schema": {
+                 "$ref": "#/components/schemas/StoryData"
+               }
+             }
+           }
+         },
+         "404": {
+           "description": "Failed to load resource",
+           "content": {
+             "application/json": {
+               "schema": {
+                 "$ref": "#/components/schemas/Error"
+               },
+               "example": {
+                 "message": "error fetching stories due to invalid call",
+                 "internal_code": "failed_to_load_resource"
+               }
+             }
+           }
+         }
+       }
+     }
+    }
+  },
+  "components": {
+    "schemas": {
+      "title": {
+        "type": "string",
+        "description": "title of the story",
+        "example": "Joe Rogan Concert"
+      },
+      "author": {
+        "type": "string",
+        "description": "name of the author",
+        "example": "Joe Rogan"
+      },
+      "image": {
+        "type": "string",
+        "format": "binary",
+        "description": "Choose an image to add"
+      },
+      "description": {
+        "type": "string",
+        "description": "describe about the story",
+        "example": "This story is about joe rogan biography"
+
+      },
+      "Add_New_Story": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "$ref": "#/components/schemas/title"
+          },
+          "author": {
+            "$ref": "#/components/schemas/author"
+          },
+          "image": {
+            "$ref": "#w/components/schemas/image"
+          },
+          "description": {
+            "$ref": "#/components/schemas/description"
+          }
+        }
+      },
+      "StoryData": {
+        "type": "object",
+        "properties": {
+          "StoryData": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Add_New_Story"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "internal_code": {
+            "type": "string"
+          }
+        }
+      }
+    }
   }
 }
