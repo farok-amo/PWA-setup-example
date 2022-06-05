@@ -2,20 +2,18 @@
  * this file contains the functions to control the drawing on the canvas
  */
 let room;
-let userId;
+let userID;
 let color = 'black', thickness = 4;
 
-function changeColour(diffColor){
-    color = diffColor;
-}
 /**
  * it inits the image canvas to draw on. It sets up the events to respond to (click, mouse on, etc.)
  * it is also the place where the data should be sent  via socket.io
  * @param sckt the open socket to register events on
  * @param imageUrl teh image url to download
  */
-function initCanvas(sckt, imageUrl) {
-    socket = sckt;
+function initCanvas(sckt, imageUrl, user) {
+    userID = user;
+    let socket = sckt;
     let flag = false,
         prevX, prevY, currX, currY = 0;
     let canvas = $('#canvas');
@@ -39,7 +37,7 @@ function initCanvas(sckt, imageUrl) {
         // if the flag is up, the movement of the mouse draws on the canvas
         if (e.type === 'mousemove') {
             if (flag) {
-                socket.emit('draw-canvas', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
+                socket.emit('drawing', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 let ctx = cvx.getContext('2d');
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 storeAnnotations([{
@@ -71,26 +69,16 @@ function initCanvas(sckt, imageUrl) {
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
-    socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
-        if (userId !== userId) {
-            console.log("dfvd");
-            let ctx = canvas[0].getContext('2d');
-            console.log((roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness));
-            drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
-            storeAnnotations([{
-                roomNo: roomNo.toString(), userId: userId, img: imageUrl, canvas_width: canvas.width,
-                canvas_height: canvas.height, prevX: prevX,
-                prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
-            }]);
-        }
+    socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) {
+        let ctx = canvas[0].getContext('2d');
+        drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
+        storeAnnotations([{
+            roomNo: roomNo.toString(), userId: userId, img: imageUrl, canvas_width: canvas.width,
+            canvas_height: canvas.height, prevX: prevX,
+            prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
+        }]);
     });
-    // I suggest that you receive userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness
-    // and then you call
-    //     let ctx = canvas[0].getContext('2d');
-    //     drawOnCanvas(ctx, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness)
 
-    // this is called when the src of the image is loaded
-    // this is an async operation as it may take time
     img.addEventListener('load', () => {
         // it takes time before the image size is computed and made available
         // here we wait until the height is set, then we resize the canvas based on the size of the image
@@ -118,6 +106,10 @@ function initCanvas(sckt, imageUrl) {
     });
 }
 
+
+function changeColour(diffColor){
+    color = diffColor;
+}
 /**
  * called when it is required to draw the image on the canvas. We have resized the canvas to the same image size
  * so ti is simpler to draw later

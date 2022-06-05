@@ -69,7 +69,8 @@ function generateRoom() {
 
 function connectToRoom(){
     let user = document.getElementById('name').value;
-    storePostID({id: 1, postID: postID, room: roomNo, user: user}).then(r => console.log("redirecting.."));
+    let room_no = document.getElementById('roomNo').value;
+    storePostID({id: 1, postID: postID, room: room_no, user: user}).then(r => console.log("redirecting.."));
 }
 
 
