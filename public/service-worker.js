@@ -6,6 +6,9 @@ let filesToCache = [
     '/javascripts/index.js',
     '/javascripts/canvas.js',
     '/javascripts/chat-room.js',
+    '/javascripts/database.js',
+    '/javascripts/knowledgeGraph.js',
+    '/javascripts/story.js',
     '/stylesheets/style.css',
     '/chat-room/create',
 
