@@ -23,7 +23,7 @@ function initCanvas(sckt, imageUrl) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-    getAnnotationsHistory(roomNo,imageUrl);
+    getAnnotationsHistory(roomNo, imageUrl).then(r = console.log("retrived previous annotations"));
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         prevX = currX;
@@ -42,9 +42,11 @@ function initCanvas(sckt, imageUrl) {
                 socket.emit('draw-canvas', roomNo, name, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
                 let ctx = cvx.getContext('2d');
                 drawOnCanvas(ctx, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness);
-                storeAnnotations([{roomNo: roomNo, userId: name,img: imageUrl,canvas_width: canvas.width,
-                                            canvas_height:canvas.height, prevX: prevX,
-                                            prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);
+                storeAnnotations([{
+                    roomNo: roomNo, userId: name, img: imageUrl, canvas_width: canvas.width,
+                    canvas_height: canvas.height, prevX: prevX,
+                    prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
+                }]);
                 // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
             }
@@ -70,15 +72,17 @@ function initCanvas(sckt, imageUrl) {
     });
 
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
-    socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness){
-        if(userId !== userId) {
+    socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness) {
+        if (userId !== userId) {
             console.log("dfvd");
             let ctx = canvas[0].getContext('2d');
             console.log((roomNo, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness));
             drawOnCanvas(ctx, roomNo, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
-            storeAnnotations([{roomNo: roomNo, userId: userId,img: imageUrl,canvas_width: canvas.width,
-                canvas_height:canvas.height, prevX: prevX,
-                prevY:prevY, currX: currX, currY: currY, color: color, thickness: thickness}]);
+            storeAnnotations([{
+                roomNo: roomNo, userId: userId, img: imageUrl, canvas_width: canvas.width,
+                canvas_height: canvas.height, prevX: prevX,
+                prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
+            }]);
         }
     });
     // I suggest that you receive userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness
@@ -95,17 +99,17 @@ function initCanvas(sckt, imageUrl) {
             if (img.naturalHeight) {
                 clearInterval(poll);
                 // resize the canvas
-                let ratioX=1;
-                let ratioY=1;
+                let ratioX = 1;
+                let ratioY = 1;
                 // if the screen is smaller than the img size we have to reduce the image to fit
-                if (img.clientWidth>window.innerWidth)
-                    ratioX=window.innerWidth/img.clientWidth;
-                if (img.clientHeight> window.innerHeight)
-                    ratioY= img.clientHeight/window.innerHeight;
-                let ratio= Math.min(ratioX, ratioY);
+                if (img.clientWidth > window.innerWidth)
+                    ratioX = window.innerWidth / img.clientWidth;
+                if (img.clientHeight > window.innerHeight)
+                    ratioY = img.clientHeight / window.innerHeight;
+                let ratio = Math.min(ratioX, ratioY);
                 // resize the canvas to fit the screen and the image
-                cvx.width = canvas.width = img.clientWidth*ratio;
-                cvx.height = canvas.height = img.clientHeight*ratio;
+                cvx.width = canvas.width = img.clientWidth * ratio;
+                cvx.height = canvas.height = img.clientHeight * ratio;
                 // draw the image onto the canvas
                 drawImageScaled(img, cvx, ctx);
                 // hide the image element as it is not needed

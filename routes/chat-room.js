@@ -10,4 +10,11 @@ router.route('/create')
         })
     })
 
+router.route('/room')
+    .get(function(req, res) {
+        res.render('chat-room', {
+            title: 'Chat Room'
+        })
+    })
+
 module.exports = router;

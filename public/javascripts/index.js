@@ -40,6 +40,7 @@ function addResults(posts){
 }
 
 function getPostID(postID){
-    storePostID({id:1,postID:postID});
+    console.log(postID);
+    storePostID({id: 1, postID: postID}).then(r => console.log("redirecting.."));
 }
 

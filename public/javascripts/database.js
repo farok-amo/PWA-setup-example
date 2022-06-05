@@ -173,9 +173,15 @@ async function getOnePost() {
         let readingsList1 = await post_id_index.getAll(IDBKeyRange.only(1));
         await tx.complete;
         let postID;
+        let roomNo = "";
+        let user = "";
         if (readingsList1 && readingsList1.length > 0) {
             for (let elem of readingsList1) {
                 postID = elem.postID;
+                if(elem.room){
+                    roomNo = elem.room;
+                    user = elem.user;
+                }
             }
         }
         let tx_1 = await db.transaction(POSTS_STORE, 'readonly');
@@ -185,7 +191,12 @@ async function getOnePost() {
         await tx_1.complete;
         if (readingsList && readingsList.length > 0) {
             for (let elem of readingsList) {
-                addPostToResults(elem);
+                if(roomNo==""){
+                    addPostToResults(elem);
+                }else{
+                    addPostToResults(elem,roomNo,user);
+                }
+
             }
         }
     }
