@@ -21,7 +21,9 @@ function addPostToResults(post,room,user){
 }
 
 
-const initChatSocket = () => {
+const
+
+    initChatSocket = () => {
     chat.on('joined', (room, userId) => {
         if(userId === name){
             getChatHistory(room);

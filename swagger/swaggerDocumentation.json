@@ -1,27 +1,60 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "API Title",
-    "version": "1.0"
+    "title": "Spy Chat Swagger Documentation ",
+    "version": "1.0.0"
   },
-  "servers": [
-    {
-      "url": "https://api.server.test/v1"
-    }
-  ],
+  "contact": {
+    "name": "frazer Eastman ",
+    "email": "frazereastman@gmail.com",
+    "url": "https://shef.ac.uk"
+  },
+  "license": {
+    "name": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+  },
+  "servers": [{
+    "url": "http://localhost:8031/",
+    "description": "the Local server"
+  }],
   "paths": {
-    "/post-story": {
+    "/fetch_stories": {
       "post": {
         "tags": [
-          "Posting or adding a new Story"
+          "Fetching stories  "
         ],
-        "description": "sending and updating a new story as data",
-        "operationId": "Add story",
+        "description": "This will fetch all stories and display them on the home page",
+        "operationId": "fetch all stories",
+        "requestBody": {
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Story"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/post_new_story": {
+      "post": {
+        "tags": [
+          "adding a new story  "
+        ],
+        "description": "This will add a new incident report",
+        "operationId": "add a new story",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Add_New_Story"
+                "$ref": "#/components/schemas/AddStory"
               }
             }
           },
@@ -29,96 +62,49 @@
         },
         "responses": {
           "200": {
-            "description": "Story posted or added",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StoryData"
-                }
-              }
-            }
+            "description": "Story added"
           },
           "400": {
-            "description": "Invalid Parameters",
+            "description": "Missing parameters",
             "content": {
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
                 },
                 "example": {
-                  "message": "Input field is invalid",
-                  "internal-code": "invalid_parameters"
+                  "message": "one of the fields is wrong",
+                  "internal_code": "missing_parameters"
                 }
               }
             }
-
           }
         }
       }
-    },
-    "/": {
-     "post": {
-       "tags": [
-         "Fetch stories"
-       ],
-       "description": "This will call the get method and show them on home page by fetching them all",
-       "operationId": "getting all stories",
-       "requestBody": {
-         "required": true
-       },
-       "response": {
-         "200": {
-           "description": "Stories fetched successfully",
-           "content": {
-             "application/json": {
-               "schema": {
-                 "$ref": "#/components/schemas/StoryData"
-               }
-             }
-           }
-         },
-         "404": {
-           "description": "Failed to load resource",
-           "content": {
-             "application/json": {
-               "schema": {
-                 "$ref": "#/components/schemas/Error"
-               },
-               "example": {
-                 "message": "error fetching stories due to invalid call",
-                 "internal_code": "failed_to_load_resource"
-               }
-             }
-           }
-         }
-       }
-     }
     }
   },
   "components": {
     "schemas": {
       "title": {
-        "type": "string",
-        "description": "title of the story",
-        "example": "Joe Rogan Concert"
+        "type": "String",
+        "description": "Title of the incident",
+        "example": "Mick-Jagger Concert"
       },
       "author": {
-        "type": "string",
-        "description": "name of the author",
-        "example": "Joe Rogan"
+        "type": "String",
+        "description": "Name of the author ",
+        "example": "John Doe"
+      },
+      "description": {
+        "type": "String",
+        "description": "Describe the incident ",
+        "example": "The singer was rumoured to be making use of drugs of type A"
       },
       "image": {
         "type": "string",
         "format": "binary",
-        "description": "Choose an image to add"
+        "description": "add an image"
       },
-      "description": {
-        "type": "string",
-        "description": "describe about the story",
-        "example": "This story is about joe rogan biography"
-
-      },
-      "Add_New_Story": {
+      "AddStory": {
         "type": "object",
         "properties": {
           "title": {
@@ -127,21 +113,21 @@
           "author": {
             "$ref": "#/components/schemas/author"
           },
-          "image": {
-            "$ref": "#w/components/schemas/image"
-          },
           "description": {
             "$ref": "#/components/schemas/description"
+          },
+          "image": {
+            "$ref": "#/components/schemas/image"
           }
         }
       },
-      "StoryData": {
+      "Story": {
         "type": "object",
         "properties": {
-          "StoryData": {
+          "Story": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/Add_New_Story"
+              "$ref": "#/components/schemas/AddStory"
             }
           }
         }
