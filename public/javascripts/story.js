@@ -4,6 +4,10 @@ function init(){
     getToUploadPostData();
 }
 
+/**
+ * function to get the pending posts from indexed db and add it to the UI
+ * @param posts
+ */
 function pendingPosts(posts){
     document.getElementById('pending-post-block').style.display = 'block';
     let pendingPostDiv = document.getElementById('pending-posts');
@@ -18,9 +22,13 @@ function pendingPosts(posts){
     }
 }
 
+/**
+ * function to send the pending post to the server via axios
+ * @param data
+ */
 function addPendingPosts(data){
     console.log(data);
-    sendAjaxQuery('./post-story', data);
+    sendAxiosQuery('./post-story', data);
     clearUploadedPost(data.id);
 }
 
@@ -36,12 +44,17 @@ function onSubmit(event) {
     for (let index in formArray){
         data[formArray[index].name]= formArray[index].value;
     }
-    sendAjaxQuery('./post-story', data);
+    sendAxiosQuery('./post-story', data);
     // prevent the form from reloading the page (normal behaviour for forms)
     event.preventDefault()
 }
 
-function sendAjaxQuery(url, data) {
+/**
+ * function to make server communications
+ * @param url
+ * @param data
+ */
+function sendAxiosQuery(url, data) {
     axios.post(url , data)
         .then (function (data) {
             alert(JSON.stringify(data.data))

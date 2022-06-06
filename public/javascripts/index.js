@@ -1,13 +1,18 @@
-function init(){
-    sendAjaxQuery('/');
-    // if ('serviceWorker' in navigator) {
-    //     navigator.serviceWorker
-    //         .register('./service-worker.js')
-    //         .then(function() { console.log('Service Worker Registered'); });
-    // }
-}
 let posts;
-function sendAjaxQuery(url) {
+function init(){
+    sendAxiosQuery('/');
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+            .register('./service-worker.js')
+            .then(function() { console.log('Service Worker Registered'); });
+    }
+}
+
+/**
+ * function to make axios calls to get the posts from the server
+ * @param url
+ */
+function sendAxiosQuery(url) {
     axios.post(url)
         .then (function (data) {
             posts = JSON.parse(JSON.stringify(data.data));
@@ -23,6 +28,10 @@ function sendAjaxQuery(url) {
         })
 }
 
+/**
+ * function to add the posts to the UI
+ * @param posts
+ */
 function addResults(posts){
     var postsDiv = document.getElementById('all-posts');
     postsDiv.innerHTML = '';
@@ -41,11 +50,22 @@ function addResults(posts){
     }
 }
 
+/**
+ * function to cache the postID
+ * @param postID
+ */
 function getPostID(postID){
     console.log(postID);
     storePostID({id: 1, postID: postID}).then(r => console.log("redirecting.."));
 }
 
+
+/**
+ * function to sort the JSON array
+ * @param prop
+ * @returns {(function(*, *): (number))|*}
+ * @constructor
+ */
 function GetSortOrder(prop) {
     return function(a, b) {
         if (a[prop] > b[prop]) {
@@ -57,7 +77,22 @@ function GetSortOrder(prop) {
     }
 }
 
+/**
+ * function to sort the posts based on author name and date
+ * @param value
+ */
 function sortPosts(value){
     posts.sort(GetSortOrder(value));
     addResults(posts);
+}
+
+
+window.addEventListener('online', updateStatus);
+window.addEventListener('offline', updateStatus);
+function updateStatus (event) {
+    if (navigator.onLine) {
+        console.log("Your connection is back.")
+    } else {
+        console.log("You have lost your internet connection");
+    }
 }

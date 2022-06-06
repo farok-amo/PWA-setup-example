@@ -1,4 +1,3 @@
-
 let name = null;
 let roomNo = null;
 let chat = io.connect('/chat');
@@ -16,6 +15,10 @@ function init() {
     getOnePost().then(r => console.log(""));
 }
 
+/**
+ * function to add the posts to the UI
+ * @param elem
+ */
 function addPostToResults(elem){
     postID = elem._id;
     document.getElementById('post-title').innerText= "Create a chat room for post: "+elem.title;
@@ -23,6 +26,9 @@ function addPostToResults(elem){
     getAllRoomsForEachPost(elem.img).then(r => populatePrevRooms())
 }
 
+/**
+ * function to get all rooms previously created
+ */
 function populatePrevRooms(){
     let prevRooms = document.getElementById('prev-rooms');
     for(let room in rooms){
@@ -32,12 +38,19 @@ function populatePrevRooms(){
     }
 }
 
+/**
+ * setter function
+ * @param roomNos
+ */
 function setRooms(roomNos){
     for(let roomNo in roomNos){
         rooms[roomNo] = roomNo.valueOf(roomNo);
     }
 }
 
+/**
+ * set the room value to the input field of room no
+ */
 function setRoomToInput() {
     var selectBox = document.getElementById('prev-rooms');
     var selectedValue = selectBox.options[selectBox.selectedIndex].value;
@@ -67,16 +80,14 @@ function generateRoom() {
     }
 }
 
+/**
+ * function to store the postid and room no in indexeddb
+ */
 function connectToRoom(){
     let user = document.getElementById('name').value;
     let room_no = document.getElementById('roomNo').value;
     storePostID({id: 1, postID: postID, room: room_no, user: user}).then(r => console.log("redirecting.."));
 }
-
-
-
-
-// const service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 
 
 

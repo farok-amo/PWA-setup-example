@@ -7,6 +7,13 @@ function innit(){
     getOnePost().then(r => console.log(""));
     initChatSocket();
 }
+
+/**
+ * function to get the post details to add it to the UI
+ * @param post
+ * @param room
+ * @param user
+ */
 function addPostToResults(post,room,user){
     roomNo = room;
     name = user;
@@ -22,7 +29,12 @@ function addPostToResults(post,room,user){
 }
 
 
+/**
+ * funciton to start the socket.io
+ */
 const initChatSocket = () => {
+
+    //when a different user joins the room
     chat.on('joined', (room, userId) => {
         if(userId === name){
             getChatHistory(room);
@@ -31,6 +43,7 @@ const initChatSocket = () => {
         }
     });
 
+    //when the user chats
     chat.on('chat', (room, userId, chatText) => {
         let sender = userId;
         if(userId === name) sender = 'Me';
@@ -38,14 +51,8 @@ const initChatSocket = () => {
         let imageSrc = img;
         storeChatHistory([{room: room, img: imageSrc, sender: sender, message: chatText}]).then (r =>console.log(""));
     });
-
-    // chat.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight){
-    //     if(userId == name){
-    //         let ctx = canvas[0].getContext('2d');
-    //         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-    //     }
-    // })
 }
+
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket

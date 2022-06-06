@@ -5,7 +5,6 @@
  * and it displays the Google Graph widget
  * it also hides the form to get the type
  */
-
  function widgetInit(){
     let type= document.getElementById("myType").value;
 
@@ -37,17 +36,15 @@
  */
 function selectItem(event){
     let row= event.row;
-    // document.getElementById('resultImage').src= row.json.image.url;
-    // document.getElementById('resultId').innerText= 'id: '+row.id;
-    // document.getElementById('resultName').innerText= row.name;
-    // document.getElementById('resultDescription').innerText= row.rc;
-    // document.getElementById("resultUrl").href= row.qc;
-    // document.getElementById('resultPanel').style.display= 'block';
     let data = {room:roomNo,id:row.id,name:row.name,rc:row.rc,qc:row.qc,border_color:color};
     storeKnowledgeGraph(data).then(r => console.log("stored knowledge graph"));
     addKnowledgeGraph(data);
 }
 
+/**
+ * function to add the knowledge graph generated
+ * @param data
+ */
 function addKnowledgeGraph(data){
     document.getElementById('knowledge-graph-result').style.display = 'block';
     let knowledgeGraphDiv = document.getElementById('knowledge-graph-result');
