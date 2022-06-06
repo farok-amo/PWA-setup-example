@@ -6,7 +6,7 @@
  * plus the associated actions
  */
 function init() {
-    getOnePost().then(r => console.log(""));
+    getOnePost().then(r => console.log("Got Post!"));
 }
 var name = null;
 var roomNo = null;

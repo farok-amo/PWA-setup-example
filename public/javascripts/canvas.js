@@ -22,7 +22,7 @@ function initCanvas(sckt, imageUrl, user) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-    getOldAnnotation(imageUrl).then(null);
+    getOldAnnotation(imageUrl).then( r => console.log("Fetched all annotations"));
 
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
@@ -47,7 +47,6 @@ function initCanvas(sckt, imageUrl, user) {
                     canvas_height: canvas.height, prevX: prevX,
                     prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
                 }]);
-                // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
             }
         }
     });

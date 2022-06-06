@@ -61,8 +61,8 @@ function sendAxiosQuery(url, data) {
             window.location.href = '../'
         })
         .catch( function (response) {
-            storeToUploadPostData(data);
+            storeToUploadPostData(data).then(r => console.log("Saved data locally"));
             alert ("Cannot connect to server! Story saved locally");
-            getToUploadPostData();
+            getToUploadPostData().then(r => console.log("Received the pending posts"));
         })
 }
