@@ -3,6 +3,12 @@ let roomNo = null;
 let chat = io.connect('/chat');
 var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
 let img = null;
+
+/**
+ * called by <body onload>
+ * it initialises the interface and the expected socket messages
+ * plus the associated actions
+ */
 function innit(){
     getOnePost().then(r => console.log(""));
     initChatSocket();
@@ -34,16 +40,17 @@ function addPostToResults(post,room,user){
  */
 const initChatSocket = () => {
 
-    //when a different user joins the room
+    // called when someone joins the room. If it is someone else it notifies the joining of the room
     chat.on('joined', (room, userId) => {
         if(userId === name){
             getChatHistory(room);
         } else {
+            // notifies that someone has joined the room
             writeOnHistory('<b>' + userId + '</b>' + 'joined room' + room);
         }
     });
 
-    //when the user chats
+    // called when a message is received
     chat.on('chat', (room, userId, chatText) => {
         let sender = userId;
         if(userId === name) sender = 'Me';
