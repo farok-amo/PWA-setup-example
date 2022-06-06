@@ -5,7 +5,7 @@ let filesToCache = [
   'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
 
   '/',
-  'story/post-story',
+  '/story/post-story',
   '/chat-room/create',
   '/chat-room/room',
 
