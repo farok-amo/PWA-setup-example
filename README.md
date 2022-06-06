@@ -1,5 +1,5 @@
-# COM6504-Assignment
-
+# COM6504 Module Assignment
+## Group work
 
 > Complete assignment project site built with Node.js, Express, MongoDB, Socket-io, Bootstrap, Knowledge graph
 
