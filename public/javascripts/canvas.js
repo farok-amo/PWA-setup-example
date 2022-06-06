@@ -21,7 +21,8 @@ function initCanvas(sckt, imageUrl, user) {
     let img = document.getElementById('image');
     let ctx = cvx.getContext('2d');
     img.src = imageUrl;
-    getAnnotationsHistory(roomNo, imageUrl).then(r = console.log("retrived previous annotations"));
+    getOldAnnotation(imageUrl).then(null);
+
     // event on the canvas when the mouse is on it
     canvas.on('mousemove mousedown mouseup mouseout', function (e) {
         prevX = currX;
@@ -102,6 +103,9 @@ function initCanvas(sckt, imageUrl, user) {
     });
 }
 
+async function getOldAnnotation(imageUrl) {
+    await getAnnotationsHistory(roomNo, imageUrl).then(r = console.log("retrived previous annotations"));
+}
 
 function changeColour(diffColor){
     color = diffColor;
