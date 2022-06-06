@@ -1,10 +1,4 @@
 
-let name = null;
-let roomNo = null;
-let chat = io.connect('/chat');
-let rooms = {};
-var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
-let postID = null;
 
 
 /**
@@ -15,6 +9,12 @@ let postID = null;
 function init() {
     getOnePost().then(r => console.log(""));
 }
+var name = null;
+var roomNo = null;
+var chat = io.connect('/chat');
+var rooms = {};
+var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
+var postID = null;
 
 function addPostToResults(elem){
     postID = elem._id;

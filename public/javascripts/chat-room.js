@@ -1,12 +1,13 @@
-let name = null;
-let roomNo = null;
-let chat = io.connect('/chat');
-var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
-let img = null;
+
 function innit(){
     getOnePost().then(r => console.log(""));
     initChatSocket();
 }
+var name = null;
+var roomNo = null;
+var chat = io.connect('/chat');
+var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
+var img = null;
 function addPostToResults(post,room,user){
     roomNo = room;
     name = user;
