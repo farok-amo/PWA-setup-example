@@ -14,7 +14,7 @@ function addPostToResults(post,room,user){
     if (!name) name = 'Unknown-' + Math.random();
     chat.emit('create or join', roomNo, name);
     initCanvas(chat, img,user);
-    document.getElementById('room-title').innerText = "Chat Room for Story:"+post.title+" by "+post.author;
+    document.getElementById('room-title').innerText = "Chat Room for Story: "+post.title+" by "+post.author;
     document.getElementById('who_you_are').innerHTML= name;
     document.getElementById('in_room').innerHTML= ' '+room;
     document.getElementById('postDescription').innerText = "Description of the Story: "+post.description;
