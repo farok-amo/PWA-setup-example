@@ -96,11 +96,15 @@
         </div>
 
         <div class="row-cols-auto">
+
+            <!-- Buttons for knowledge graph and navigate back to Home from private room-->
             <button type="button" class="btn btn-primary float-md-end m-2" data-bs-toggle="modal" data-bs-target="#Modal">
                 Knowledge Graph
             </button>
             <a href="/"><button class="btn btn-secondary float-md-end m-2" type="button">Home</button></a>
         </div>
+
+        <!-- Modal for knowledge graph -->
         <div class="modal fade" id="Modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -137,26 +141,21 @@
             </div>
             <div class="col-12 boxed">
                <p class="text-black fw-bold">Choose a color to draw on canvas:</p>
+
+                <!-- Various buttons defined to change color to draw -->
                 <button type="button" style="background-color: blue" onclick="changeColour('blue')">BLUE</button>
                 <button type="button" style="background-color: green" onclick="changeColour('green')">GREEN</button>
                 <button type="button" style="background-color: yellow" onclick="changeColour('yellow')">YELLOW</button>
                 <button type="button" style="background-color: red" onclick="changeColour('red')">RED</button>
             </div>
         </div>
-        <!--    </div>-->
+        <!-- button for clearing drawn annotations -->
         <button id="canvas-clear" class="mt-3" type="button">Clear canvas</button>
 
         <p class="mt-2 text-center text-capitalize"> Messages will appear here :</p>
         <div id="history" style="height: 35vh" class="boxed scrolling mt-3" ></div>
-<!--        <div id="input" style="height: 5vh" class="boxed">-->
-<!--            <form onsubmit="return false;" style="width: 100%">-->
-<!--                <p>-->
-<!--                    <label for="name"> chat: </label>-->
-<!--                    <input type="text" id="chat_input" name="chat_input" style="width: 80%">-->
-<!--                    <button id="chat_send" onclick="sendChatText()">Send</button>-->
-<!--                </p>-->
-<!--            </form>-->
-<!--        </div>-->
+
+        <!-- chat button to open chat pop-up box-->
         <button class="open-button" onclick="openForm()">Chat</button>
         <div class="chat-popup" id="myForm">
             <form onsubmit="return false;" class="form-container">
@@ -164,27 +163,18 @@
 
                 <label for="msg"><b>Message</b></label>
                 <textarea placeholder="Type message.." name="msg" id="chat_input" name="chat_input" required></textarea>
-<!--                <input type="text" id="chat_input" name="chat_input" style="width: 80%">-->
+
+                <!--Send Button to send chat messge in the room -->
                 <button type="submit" id="chat_send" class="btn" onclick="sendChatText()">Send</button>
+
+                <!-- Close button to close -->
                 <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
             </form>
         </div>
-<!--        <div class="container">-->
-<!--            <h1>Search the Knowledge Graph</h1>-->
-<!--            <div class="myRow" id="typeForm">-->
-<!--                <label for="myType">Type: </label><input type="text" id="myType">-->
-<!--                <button onclick="widgetInit()">Set type</button>-->
-<!--            </div>-->
-<!--            <div class="myRow" id='widget' style="display: none">-->
-<!--                <label for="myInput">Search for: </label><input type="text" id="myInput">-->
-<!--                <div class="myRow" id="typeSet"></div>-->
-<!--            </div>-->
-<!--            <div id="knowledge-graph-result" style="display: none"></div>-->
-<!--        </div>-->
     </div>
 
 
-
+<!-- javascript defined for modal open and close -->
     <script>
         function openForm() {
             document.getElementById("myForm").style.display = "block";
