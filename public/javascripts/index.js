@@ -6,10 +6,11 @@ function init(){
     //         .then(function() { console.log('Service Worker Registered'); });
     // }
 }
-
+let posts;
 function sendAjaxQuery(url) {
     axios.post(url)
         .then (function (data) {
+            posts = JSON.parse(JSON.stringify(data.data));
             addResults(data.data);
             storePostData(data.data)
                 .then(response => console.log('Refreshed Page!!'))
@@ -24,6 +25,7 @@ function sendAjaxQuery(url) {
 
 function addResults(posts){
     var postsDiv = document.getElementById('all-posts');
+    postsDiv.innerHTML = '';
     for(let i in posts){
         let post = posts[i];
         const newDiv = document.createElement("div");
@@ -44,3 +46,18 @@ function getPostID(postID){
     storePostID({id: 1, postID: postID}).then(r => console.log("redirecting.."));
 }
 
+function GetSortOrder(prop) {
+    return function(a, b) {
+        if (a[prop] > b[prop]) {
+            return 1;
+        } else if (a[prop] < b[prop]) {
+            return -1;
+        }
+        return 0;
+    }
+}
+
+function sortPosts(value){
+    posts.sort(GetSortOrder(value));
+    addResults(posts);
+}

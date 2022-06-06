@@ -11,7 +11,8 @@
     <script src="/javascripts/index.js"></script>
 </head>
 <body onload="init()" >
-
+    <button onclick="sortPosts('author')">Sort by Author</button>
+    <button onclick="sortPosts('createdAt')">Sort by Date</button>
     <!--Post a story button-->
     <form action="story/post-story">
         <input type="submit" value="Post Story" />
