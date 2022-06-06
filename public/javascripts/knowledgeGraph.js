@@ -43,7 +43,7 @@ function selectItem(event){
     // document.getElementById('resultDescription').innerText= row.rc;
     // document.getElementById("resultUrl").href= row.qc;
     // document.getElementById('resultPanel').style.display= 'block';
-    let data = {room:roomNo,id:row.id,name:row.name,rc:row.rc,qc:row.qc};
+    let data = {room:roomNo,id:row.id,name:row.name,rc:row.rc,qc:row.qc,border_color:color};
     storeKnowledgeGraph(data).then(r => console.log("stored knowledge graph"));
     addKnowledgeGraph(data);
 }
@@ -52,7 +52,7 @@ function addKnowledgeGraph(data){
     document.getElementById('knowledge-graph-result').style.display = 'block';
     let knowledgeGraphDiv = document.getElementById('knowledge-graph-result');
     let result = document.createElement("div");
-    result.innerHTML = '<div class=\'resultPanel\' id="resultPanel">\n' +
+    result.innerHTML = '<div class=\'resultPanel\' id="resultPanel" style="border-color: '+data.border_color+'; border-style: solid;">\n' +
 '                     <h3 id="resultName">'+data.name+'</h3>\n' +
 '                    <h4 id="resultId">'+data.id+'</h4>\n' +
 '                    <div id="resultDescription">'+data.rc+'</div>\n' +
