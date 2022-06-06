@@ -2,25 +2,25 @@ let cache= null;
 let dataCacheName = 'storyv1.02';
 
 let filesToCache = [
-    '/',
-    '/javascripts/index.js',
-    '/javascripts/database.js',
-    'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
-    'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
-    '/stylesheets/style.css',
+  'https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js',
 
-    'story/post-story',
-    '/javascripts/story.js',
+  '/',
+  'story/post-story',
+  '/chat-room/create',
+  '/chat-room/room',
 
-    '/chat-room/create',
-    '/javascripts/create-room.js',
+  '/javascripts/index.js',
+  '/javascripts/database.js',
+  '/javascripts/story.js',
+  '/javascripts/create-room.js',
+  '/javascripts/chat-room.js',
+  '/javascripts/canvas.js',
 
-    '/javascripts/chat-room.js',
-    '/javascripts/canvas.js',
-    '/socket.io/socket.io.js',
-    '/javascripts/knowledgeGraph.js',
-    '/stylesheets/widget.min.css',
-    '/javascripts/widget.min.js'
+  
+  '/stylesheets/style.css',
+  '/stylesheets/bootstrap.min.css'
+
+
 ];
 
 
@@ -64,6 +64,7 @@ self.addEventListener('fetch', function (e) {
 
         return;
       }
+
 
       if (e.request.url.indexOf('kgsearch.googleapis.com') == 0){
 
