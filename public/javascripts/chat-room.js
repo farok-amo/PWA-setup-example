@@ -17,13 +17,12 @@ function addPostToResults(post,room,user){
     document.getElementById('room-title').innerText = "Chat Room for Story:"+post.title+" by "+post.author;
     document.getElementById('who_you_are').innerHTML= name;
     document.getElementById('in_room').innerHTML= ' '+room;
+    document.getElementById('postDescription').innerText = "Description of the Story: "+post.description;
     getKnowledgeGraphHistory(roomNo);
 }
 
 
-const
-
-    initChatSocket = () => {
+const initChatSocket = () => {
     chat.on('joined', (room, userId) => {
         if(userId === name){
             getChatHistory(room);

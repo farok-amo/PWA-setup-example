@@ -61,7 +61,7 @@ function generateRoom() {
         }
         if(!found){
             document.getElementById('roomNo').value = roomNo;
-            document.getElementById('room-code').innerText = 'Your Room Code is: ' + roomNo;
+            // document.getElementById('room-code').innerText = 'Your Room Code is: ' + roomNo;
             flag = false;
         }
     }

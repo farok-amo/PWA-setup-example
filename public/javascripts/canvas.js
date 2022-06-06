@@ -68,6 +68,8 @@ function initCanvas(sckt, imageUrl, user) {
         clearAnnotations(roomNo).then(r => console.log("cleared all annotations"));
     });
 
+
+
     // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) {
         let ctx = canvas[0].getContext('2d');

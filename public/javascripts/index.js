@@ -27,7 +27,7 @@ function addResults(posts){
     for(let i in posts){
         let post = posts[i];
         const newDiv = document.createElement("div");
-        newDiv.innerHTML = '<div class="">\n' +
+        newDiv.innerHTML = '<div class="container">\n' +
             '            <h1>'+post.title+'</h1>\n' +
             '            <p>Posted on:'+post.createdAt+'</p>\n' +
             '            <p><img src="'+post.img+'"></p>\n' +
