@@ -22,6 +22,10 @@ exports.init = function(io) {
                 chat.to(room).emit('drawing', room, userId, canvasWidth, canvasHeight, x1, y21, x2, y2, color, thickness)
           });
 
+          socket.on('clear-canvas', function(room, userId) {
+              chat.to(room).emit('Cleared canvas', room, userId);
+          })
+
         } catch (e) {
 
         }

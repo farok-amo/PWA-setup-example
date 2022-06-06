@@ -45,6 +45,8 @@ function initCanvas(sckt, imageUrl, user) {
                     canvas_height: canvas.height, prevX: prevX,
                     prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
                 }]);
+                // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
+                // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
             }
         }
     });
@@ -55,16 +57,20 @@ function initCanvas(sckt, imageUrl, user) {
     //     clearCanvas
     // }
     $('#canvas-clear').on('click', function (e) {
+
         let c_width = canvas.width;
         let c_height = canvas.height;
+        /*let clear_canvas =*/
+        // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
         ctx.clearRect(0, 0, c_width, c_height);
+        socket.emit('Canvas-clear', roomNo, name);
         ctx.drawImage(img, 0, 0, c_width, c_height);
         clearAnnotations(roomNo).then(r => console.log("cleared all annotations"));
-
     });
 
 
 
+    // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) {
         let ctx = canvas[0].getContext('2d');
         drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);

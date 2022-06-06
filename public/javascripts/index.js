@@ -27,13 +27,13 @@ function addResults(posts){
     for(let i in posts){
         let post = posts[i];
         const newDiv = document.createElement("div");
-        newDiv.innerHTML = '<div class="container">\n' +
-            '            <h1>'+post.title+'</h1>\n' +
-            '            <p>Posted on:'+post.createdAt+'</p>\n' +
-            '            <p><img src="'+post.img+'"></p>\n' +
-            '            <p>By: '+post.author+'</p>\n' +
-            '            <p>'+post.description+'</p>\n' +
-            '            <a href="./chat-room/create" onclick="getPostID(\''+post._id+ '\')"><button>Chat room for this post</button></a>'+
+        newDiv.innerHTML = '<div class="container row mb-3">\n' +
+            '            <h1 class="fw-bold font-monospace">'+post.title+'</h1>\n' +
+            '            <p class="fw-normal font-monospace fst-normal">Posted on:'+post.createdAt+'</p>\n' +
+            '            <p class="img-thumbnail mw-80 "><img src="'+post.img+'"></p>\n' +
+            '            <p class="fw-bold font-monospace">By: '+post.author+'</p>\n' +
+            '            <p class="fw-normal font-monospace">'+post.description+'</p>\n' +
+            '            <a href="./chat-room/create" onclick="getPostID(\''+post._id+ '\')"><button class="btn btn-secondary btn-group-lg">Chat room for this post</button></a>'+
             '        </div><br>' ;
         postsDiv.appendChild(newDiv);
     }
