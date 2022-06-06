@@ -3,11 +3,6 @@
 <head>
     <title><%= title %></title>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.css">
-<!--    <style>-->
-<!--        .kge-search-picker {-->
-<!--            width:<DROPDOWN_MENU_WIDTH>;-->
-<!--        }-->
-<!--    </style>-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script type="text/javascript" src="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
@@ -38,6 +33,8 @@
                 <input type="text" placeholder="Click on generate room button." id="roomNo" class="form-control" name="roomNo">
             </div>
           </div>
+
+            <!--Button to generate a random room number-->
             <button id="roomNoGenerator" class="btn-outline-primary btn" onclick="generateRoom()">Generate Room</button>
             <div class="form-group row mb-3 mt-3">
                 <label for="prev-rooms">Previous Rooms: </label>
@@ -47,7 +44,8 @@
                     </select>
                 </div>
             </div>
-<!--                <p id="room-code form-control">Your Room Code is:</p>-->
+
+            <!--Connect button to connect to a room-->
             <a id="connect" href="./room"><button class="btn btn-primary" type="button" role="button" onclick="connectToRoom()">Connect</button></a>
         </form>
     </div>
