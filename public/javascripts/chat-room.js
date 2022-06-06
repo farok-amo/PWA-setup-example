@@ -3,8 +3,6 @@ let roomNo = null;
 let chat = io.connect('/chat');
 var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
 let img = null;
-
-
 function innit(){
     getOnePost().then(r => console.log(""));
     initChatSocket();
