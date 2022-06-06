@@ -8,6 +8,7 @@
 <!--            width:<DROPDOWN_MENU_WIDTH>;-->
 <!--        }-->
 <!--    </style>-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <script type="text/javascript" src="https://www.gstatic.com/knowledge/kgsearch/widget/1.0/widget.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'/>
@@ -18,25 +19,39 @@
     <script src="/javascripts/canvas.js"></script>
 </head>
 <body onload="init()">
-    <div id="initial_form" style="display: block">
-        <h1 id="post-title"></h1>
-        <img id="post-image"/>
+ <div id="initial_form" class="container">
+        <h1 id="post-title" class="display-4 fw-bold"></h1>
+     <div>
+        <img class="w-25" id="post-image"/>
         <h2 id="post-author"> </h2>
+     </div>
         <form onsubmit="return false;">
-            <p><label for="name"> Enter your name: </label>
-                <input type="text" id="name" name="name">
-            </p>
-            <p>
-                <label>Join Room</label>
-                <input type="text" id="roomNo" name="roomNo">
-                <button id="roomNoGenerator" onclick="generateRoom()">Generate Room</button>
-                <select id="prev-rooms" onchange="setRoomToInput()">
-                    <option>Show previous rooms</option>
-                </select>
-                <p id="room-code">Your Room Code is:</p>
-            </p>
-            <button><a id="connect" href="./room" onclick="connectToRoom()">Connect</a></button>
+          <div class="form-group row mb-3">
+            <label for="name"> Enter your name: </label>
+            <div class="col-md-10">
+                <input type="text" id="name" class="form-control" name="name">
+            </div>
+          </div>
+          <div class="form-group row mb-3">
+            <label>Joining Room no. ...</label>
+            <div class="col-md-10">
+                <input type="text" placeholder="Click on generate room button." id="roomNo" class="form-control" name="roomNo">
+            </div>
+          </div>
+            <button id="roomNoGenerator" class="btn-outline-primary btn" onclick="generateRoom()">Generate Room</button>
+            <div class="form-group row mb-3 mt-3">
+                <label for="prev-rooms">Previous Rooms: </label>
+                <div class="col-md-10">
+                    <select id="prev-rooms" class="form-select" onchange="setRoomToInput()">
+                    <option selected>Previous rooms</option>
+                    </select>
+                </div>
+            </div>
+<!--                <p id="room-code form-control">Your Room Code is:</p>-->
+            <a id="connect" href="./room" onclick="connectToRoom()"><button class="btn btn-primary">Connect</button></a>
         </form>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 </body>
 </html>
