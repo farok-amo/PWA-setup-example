@@ -8,6 +8,11 @@ const CHATS_STORE = 'store_chats';
 const IMAGE_ANNOTATIONS_STORE = 'store_annotations';
 const POSTID_FOR_CHAT_STORE = 'store_post_id';
 const KNOWLEDGE_GRAPH_STORE = 'store_knowledge_graph';
+
+/**
+ * function to create the stores in indexeddb
+ * @returns {Promise<void>}
+ */
 async function initDatabase(){
     if(!db){
         db = await idb.openDB(DATABASE, 2, {
@@ -60,6 +65,12 @@ async function initDatabase(){
 }
 window.initDatabase = initDatabase;
 
+
+/**
+ * function to store all the posts received from mongodb
+ * @param postObject
+ * @returns {Promise<void>}
+ */
 async function storePostData(postObject) {
     if (!db)
         await initDatabase();
@@ -80,6 +91,12 @@ async function storePostData(postObject) {
 }
 window.storePostData= storePostData;
 
+
+/**
+ * function to the post that is uploaded when offline
+ * @param postObject
+ * @returns {Promise<void>}
+ */
 async function storeToUploadPostData(postObject) {
     if (!db)
         await initDatabase();
@@ -97,6 +114,10 @@ async function storeToUploadPostData(postObject) {
 }
 window.storeToUploadPostData= storeToUploadPostData;
 
+/**
+ * function to get the post that is uploaded when offline(pending posts)
+ * @returns {Promise<void>}
+ */
 async function getToUploadPostData() {
     if (!db)
         await initDatabase();
@@ -113,6 +134,12 @@ async function getToUploadPostData() {
 }
 window.getToUploadPostData= getToUploadPostData;
 
+
+/**
+ * function to get the post that the user wishes to upload when back online
+ * @param postID
+ * @returns {Promise<void>}
+ */
 async function getOneToUploadPostData(postID) {
     if (!db)
         await initDatabase();
@@ -133,8 +160,11 @@ async function getOneToUploadPostData(postID) {
 window.getOneToUploadPostData= getOneToUploadPostData;
 
 
-
-
+/**
+ * function to delete all the uploaded posts from pending posts
+ * @param postID
+ * @returns {Promise<void>}
+ */
 async function clearUploadedPost(postID){
     if (!db)
         await initDatabase();
@@ -154,6 +184,11 @@ async function clearUploadedPost(postID){
 }
 window.clearUploadedPost = clearUploadedPost;
 
+
+/**
+ * fucntion to get all the posts from indexeddb and display on the UI
+ * @returns {Promise<void>}
+ */
 async function getAllPostData() {
     if (!db)
         await initDatabase();
@@ -171,6 +206,11 @@ async function getAllPostData() {
 }
 window.getAllPostData = getAllPostData;
 
+
+/**
+ * function to get the single post that is used to chat
+ * @returns {Promise<void>}
+ */
 async function getOnePost() {
     if (!db)
         await initDatabase();
@@ -211,6 +251,11 @@ async function getOnePost() {
 }
 window.getOnePost= getOnePost;
 
+/**
+ * function to store chat history
+ * @param chats
+ * @returns {Promise<void>}
+ */
 async function storeChatHistory(chats) {
     if (!db)
         await initDatabase();
@@ -231,6 +276,11 @@ async function storeChatHistory(chats) {
 }
 window.storeChatHistory= storeChatHistory;
 
+/**
+ * function to get chat history
+ * @param roomNo
+ * @returns {Promise<void>}
+ */
 async function getChatHistory(roomNo) {
     if (!db)
         await initDatabase();
@@ -251,6 +301,11 @@ async function getChatHistory(roomNo) {
 }
 window.getChatHistory= getChatHistory;
 
+/**
+ * function to store the annotations
+ * @param annotation
+ * @returns {Promise<void>}
+ */
 async function storeAnnotations(annotation) {
     if (!db)
         await initDatabase();
@@ -270,6 +325,13 @@ async function storeAnnotations(annotation) {
 }
 window.storeAnnotations= storeAnnotations;
 
+
+/**
+ * function to get all annotations
+ * @param roomNo
+ * @param img
+ * @returns {Promise<void>}
+ */
 async function getAnnotationsHistory(roomNo,img) {
     if (!db)
         await initDatabase();
@@ -293,6 +355,12 @@ async function getAnnotationsHistory(roomNo,img) {
 }
 window.getAnnotationsHistory= getAnnotationsHistory;
 
+
+/**
+ * functiion to get all the created rooms
+ * @param imgUrl
+ * @returns {Promise<void>}
+ */
 async function getAllRoomsForEachPost(imgUrl) {
     if (!db)
         await initDatabase();
@@ -315,6 +383,12 @@ async function getAllRoomsForEachPost(imgUrl) {
 }
 window.getAllRoomsForEachPost= getAllRoomsForEachPost;
 
+
+/**
+ * funtion to store the post id(needed to send data from one page to the other)
+ * @param postID
+ * @returns {Promise<void>}
+ */
 async function storePostID(postID) {
     if (!db)
         await initDatabase();
@@ -332,6 +406,11 @@ async function storePostID(postID) {
 }
 window.storePostID= storePostID;
 
+/**
+ * function to clear the annotations
+ * @param roomNo
+ * @returns {Promise<void>}
+ */
 async function clearAnnotations(roomNo){
     if (!db)
         await initDatabase();
@@ -351,6 +430,11 @@ async function clearAnnotations(roomNo){
 }
 window.clearAnnotations = clearAnnotations;
 
+/**
+ * function to store knowdgegraphs
+ * @param data
+ * @returns {Promise<void>}
+ */
 async function storeKnowledgeGraph(data) {
     if (!db)
         await initDatabase();
@@ -368,6 +452,12 @@ async function storeKnowledgeGraph(data) {
 }
 window.storeKnowledgeGraph= storeKnowledgeGraph;
 
+
+/**
+ * function to get knowledgegraph history
+ * @param roomNo
+ * @returns {Promise<void>}
+ */
 async function getKnowledgeGraphHistory(roomNo){
     if (!db)
         await initDatabase();

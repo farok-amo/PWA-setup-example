@@ -9,7 +9,8 @@ let color = 'black', thickness = 4;
  * it inits the image canvas to draw on. It sets up the events to respond to (click, mouse on, etc.)
  * it is also the place where the data should be sent  via socket.io
  * @param sckt the open socket to register events on
- * @param imageUrl teh image url to download
+ * @param imageUrl the image url to download
+ * @param user the current user
  */
 function initCanvas(sckt, imageUrl, user) {
     userID = user;
@@ -46,32 +47,24 @@ function initCanvas(sckt, imageUrl, user) {
                     canvas_height: canvas.height, prevX: prevX,
                     prevY: prevY, currX: currX, currY: currY, color: color, thickness: thickness
                 }]);
-                // @todo if you draw on the canvas, you may want to let everyone know via socket.io (socket.emit...)  by sending them
                 // room, userId, canvas.width, canvas.height, prevX, prevY, currX, currY, color, thickness
             }
         }
     });
 
-    // this is code left in case you need to  provide a button clearing the canvas (it is suggested that you implement it)
-    // function emitAndCanvas(){
-    //     socket.emit('clear');
-    //     clearCanvas
-    // }
+    // this is code to clear the canvas
     $('#canvas-clear').on('click', function (e) {
 
         let c_width = canvas.width;
         let c_height = canvas.height;
         /*let clear_canvas =*/
-        // @todo if you clear the canvas, you want to let everyone know via socket.io (socket.emit...)
         ctx.clearRect(0, 0, c_width, c_height);
         socket.emit('Canvas-clear', roomNo, name);
         ctx.drawImage(img, 0, 0, c_width, c_height);
         clearAnnotations(roomNo).then(r => console.log("cleared all annotations"));
     });
 
-
-
-    // @todo here you want to capture the event on the socket when someone else is drawing on their canvas (socket.on...)
+    //when other users is drawing on the canvas
     socket.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness) {
         let ctx = canvas[0].getContext('2d');
         drawOnCanvas(ctx, canvasWidth, canvasHeight, prevX, prevY, currX, currY, color, thickness);
@@ -82,6 +75,7 @@ function initCanvas(sckt, imageUrl, user) {
         }]);
     });
 
+    //loads the image
     img.addEventListener('load', () => {
         // it takes time before the image size is computed and made available
         // here we wait until the height is set, then we resize the canvas based on the size of the image
@@ -109,13 +103,22 @@ function initCanvas(sckt, imageUrl, user) {
     });
 }
 
+/**
+* function to get old annotations
+ * @param imageUrl
+ */
 async function getOldAnnotation(imageUrl) {
     await getAnnotationsHistory(roomNo, imageUrl).then(r = console.log("retrived previous annotations"));
 }
 
+/**
+ * function to change the pen color
+ * @param diffColor
+ */
 function changeColour(diffColor){
     color = diffColor;
 }
+
 /**
  * called when it is required to draw the image on the canvas. We have resized the canvas to the same image size
  * so ti is simpler to draw later

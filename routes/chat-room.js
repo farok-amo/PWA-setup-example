@@ -2,7 +2,9 @@ const express = require('express');
 // const storyControl = require("../controllers/story");
 const router = express.Router();
 
-
+/**
+ * route to create a room for users to chat
+ */
 router.route('/create')
     .get(function(req, res) {
         res.render('create-room', {
@@ -10,6 +12,9 @@ router.route('/create')
         })
     })
 
+/**
+ * route to join the room
+ */
 router.route('/room')
     .get(function(req, res) {
         res.render('chat-room', {

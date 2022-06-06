@@ -8,6 +8,13 @@ var roomNo = null;
 var chat = io.connect('/chat');
 var apiKey = 'AIzaSyAG7w627q-djB4gTTahssufwNOImRqdYKM';
 var img = null;
+
+/**
+ * function to get the post details to add it to the UI
+ * @param post
+ * @param room
+ * @param user
+ */
 function addPostToResults(post,room,user){
     roomNo = room;
     name = user;
@@ -23,7 +30,12 @@ function addPostToResults(post,room,user){
 }
 
 
+/**
+ * funciton to start the socket.io
+ */
 const initChatSocket = () => {
+
+    //when a different user joins the room
     chat.on('joined', (room, userId) => {
         if(userId === name){
             getChatHistory(room);
@@ -32,6 +44,7 @@ const initChatSocket = () => {
         }
     });
 
+    //when the user chats
     chat.on('chat', (room, userId, chatText) => {
         let sender = userId;
         if(userId === name) sender = 'Me';
@@ -39,14 +52,8 @@ const initChatSocket = () => {
         let imageSrc = img;
         storeChatHistory([{room: room, img: imageSrc, sender: sender, message: chatText}]).then (r =>console.log(""));
     });
-
-    // chat.on('drawing', function (roomNo, userId, canvasWidth, canvasHeight){
-    //     if(userId == name){
-    //         let ctx = canvas[0].getContext('2d');
-    //         ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-    //     }
-    // })
 }
+
 /**
  * called when the Send button is pressed. It gets the text to send from the interface
  * and sends the message via  socket
@@ -73,48 +80,3 @@ function writeOnHistory(text) {
 }
 
 
-
-
-/**
- * it inits the widget by selecting the type from the field myType
- * and it displays the Google Graph widget
- * it also hides the form to get the type
- */
-function widgetInit(){
-    let type= document.getElementById("myType").value;
-
-    if (type) {
-        let config = {
-            'limit': 10,
-            'languages': ['en'],
-            'types': [type],
-            'maxDescChars': 100,
-            'selectHandler': selectItem,
-        }
-        KGSearchWidget(apiKey, document.getElementById("myInput"), config);
-        document.getElementById('typeSet').innerHTML= 'of type: '+type;
-        document.getElementById('widget').style.display='block';
-        document.getElementById('typeForm').style.display= 'none';
-    }
-    else {
-        alert('Set the type please');
-        document.getElementById('widget').style.display='none';
-        document.getElementById('resultPanel').style.display='none';
-        document.getElementById('typeSet').innerHTML= '';
-        document.getElementById('typeForm').style.display= 'block';
-    }
-}
-
-/**
- * callback called when an element in the widget is selected
- * @param event the Google Graph widget event {@link https://developers.google.com/knowledge-graph/how-tos/search-widget}
- */
-function selectItem(event){
-    let row= event.row;
-    // document.getElementById('resultImage').src= row.json.image.url;
-    document.getElementById('resultId').innerText= 'id: '+row.id;
-    document.getElementById('resultName').innerText= row.name;
-    document.getElementById('resultDescription').innerText= row.rc;
-    document.getElementById("resultUrl").href= row.qc;
-    document.getElementById('resultPanel').style.display= 'block';
-}
