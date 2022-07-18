@@ -1,4 +1,3 @@
-# COM6504 Module Assignment
 ## Group work
 
 > Complete assignment project site built with Node.js, Express, MongoDB, Socket-io, Bootstrap, Knowledge graph
@@ -19,7 +18,7 @@ npm i
 npm run start
 
 ```
-### Run duroing development, makes the development easier as it allows the server to be restarted with each change
+### Run during development, makes the development easier as it allows the server to be restarted with each change
 
 ```
 npm run dev
